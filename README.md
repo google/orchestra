@@ -104,3 +104,5 @@ The Worflow should start running automatically and be scheduled daily.
 Orchestra is a Framework that allows powerful API access to your data.
 Liability for how you use that data is your own.
 It is important that all data you keep is secure and that you have legal permission to work and transfer all data you use.
+Orchestra can operate across multiple Partners, please be sure that this access is covered by legal agreements with your clients before implementing Orchestra.
+This project is covered by the Apache License.
