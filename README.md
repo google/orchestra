@@ -1,6 +1,7 @@
 # Orchestra
 
-Orchestra is a framework for importing and exporting Display & Video 360 data via Apache Airflow running on Google Cloud Composer.
+Orchestra is a framework for importing and exporting Display & Video 360 (**DV360**) and Campaign Manager (**CM**) data via Apache Airflow running on Google Cloud Composer.
+
 
 Currently we support exporting:
 
@@ -27,12 +28,27 @@ And Apache Airflow
 
 https://airflow.apache.org/
 
+API references are available at:
+
+https://developers.google.com/bid-manager/v1/
+
+https://developers.google.com/doubleclick-advertisers/v3.2/
 
 ### Getting started
 
 The main hurdle to getting started is permissions for DV360.
 
-You will need to add your projects service account to three areas depending on which data you wish to access.
+### Setting up your environment for Google Marketing Platform
+
+The easiest way to set up a project is to use the default service account provided for you by Composer.
+It is far simpler to **name** this account and give it access to the **dfareporting** and **doubleclickbidmanager** by default.
+
+Service | Scope Path
+--------|------------
+DV360 | https://www.googleapis.com/auth/doubleclickbidmanager
+CM | https://www.googleapis.com/auth/dfareporting
+
+You will also need to add your service account to
 
 #### Entity Read Files
 
@@ -56,13 +72,11 @@ ADMIN > User Profiles
 
 This user will need Read and Write Access permissions.
 
-Add a connector for CM
 
 #### DV360
 
 Under User Management Create a New User with the service account email and give it Read & Write Access.
 
-Add a connector for DV360
 
 ### An Example Workflow for setting up Entity Read File imports to BigQuery
 
@@ -84,3 +98,9 @@ cloud_project_id| The full id of your project.
 Copy the file for the multiple_partners_erf_upload_bq_dag.py dag, the dv360_multi_file_upload_erf.py operator and the entire schema and utils folders required to your dag folder in Google Cloud Storage.
 
 The Worflow should start running automatically and be scheduled daily.
+
+## Data & Privacy
+
+Orchestra is a Framework that allows powerful API access to your data.
+Liability for how you use that data is your own.
+It is important that all data you keep is secure and that you have legal permission to work and transfer all data you use.
