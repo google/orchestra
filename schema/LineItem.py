@@ -117,7 +117,12 @@ LineItem_Schema = [
             "mode" : "NULLABLE",
             "type" : "INTEGER",
             "name" : "click_window_minutes"
-         }
+         },
+         {
+            "mode" : "NULLABLE",
+            "type" : "INTEGER",
+            "name" : "floodlight_activity_id"
+         },
       ],
       "mode" : "REPEATED",
       "type" : "RECORD",
