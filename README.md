@@ -1,3 +1,4 @@
+# Orchestra
 
 - [Overview ](#overview-)
 - [Setting up your Orchestra environment in GCP ](#setting-up-your-orchestra-environment-in-gcp-)
@@ -238,7 +239,6 @@ Upload all the DAGs and other required files to the DAGs Storage Folder that you
 
 ###
 
-<p id="gdcalert6" ><span style="color: red; font-weight: bold">>>>>  GDC alert: inline image link here (to images/Untitled-document5.png). Store image on your image server and adjust path/filename if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert7">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>> </span></p>
 
 
 ![alt_text](docs/images/buckets.png "image_tooltip")
