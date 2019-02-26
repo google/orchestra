@@ -1,5 +1,6 @@
 # Orchestra
 
+**Orchestra is not an official Google Product**
 - [Overview ](#overview-)
 - [Setting up your Orchestra environment in GCP ](#setting-up-your-orchestra-environment-in-gcp-)
     - [Billing ](#billing-)
@@ -47,7 +48,7 @@ See [this article](https://cloud.google.com/billing/docs/how-to/manage-billing-a
 
 
 ### APIs
-In you GCP Project menu (or directly through [this link](https://console.cloud.google.com/apis/library?project=_&_ga=2.115478214.-1781341949.1549548145)) access the API Librar so that you can enable the following APIs:
+In you GCP Project menu (or directly through [this link](https://console.cloud.google.com/apis/library?project=_&_ga=2.115478214.-1781341949.1549548145)) access the API Library so that you can enable the following APIs:
 
 
 
@@ -436,3 +437,12 @@ We're providing other DV360 operators, to be used in your DAGs, so that you're a
 
 ### Deleting an environment
 Full details can be found [here](https://cloud.google.com/composer/docs/how-to/managing/updating#deleting_an_environment). Please note that files created by Composer are not automatically deleted and you will need to remove them manually or they will still incur. Same thing applies to the BigQuery datasets.
+
+
+## Data & Privacy
+
+Orchestra is a Framework that allows powerful API access to your data.
+Liability for how you use that data is your own.
+It is important that all data you keep is secure and that you have legal permission to work and transfer all data you use.
+Orchestra can operate across multiple Partners, please be sure that this access is covered by legal agreements with your clients before implementing Orchestra.
+This project is covered by the Apache License.
