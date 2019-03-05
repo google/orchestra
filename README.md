@@ -393,6 +393,15 @@ You can then (manually) launch your DAG from the Airflow UI: identify the DAG na
 
 Once the DAG has completed successfully, you will find a new variable called **dv360_latest_report_id** in the list of Variables, populated with the ID of the generated report that you can use in the following steps of your pipeline.
 
+### Add Dependencies
+
+We use the [requests](http://docs.python-requests.org/en/master/) library to handle larger report files.
+
+You can add this to the project via the Environment Page
+
+Full details are covered [here](https://cloud.google.com/composer/docs/how-to/using/installing-python-dependencies#install-package).
+
+Simply follow the instructions and add requests as the name of the package (no version required)
 
 ### More DV360 Operators
 We're providing other DV360 operators, to be used in your DAGs, so that you're able to run reports, check their status and read their results:
