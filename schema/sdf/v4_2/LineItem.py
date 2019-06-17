@@ -1,0 +1,412 @@
+###########################################################################
+#
+#  Copyright 2019 Google Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+###########################################################################
+
+# Line Item SDF Schema for API version 4.2
+SDF_LineItem_Schema = [{
+    "type": "STRING",
+    "name": "Line_Item_Id",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Io_Id",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Type",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Subtype",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Name",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Timestamp",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Status",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Start_Date",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "End_Date",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Budget_Type",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Budget_Amount",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Pacing",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Pacing_Rate",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Pacing_Amount",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Frequency_Enabled",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Frequency_Exposures",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Frequency_Period",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Frequency_Amount",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_View_Frequency_Enabled",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_View_Frequency_Exposures",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_View_Frequency_Period",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Partner_Revenue_Model",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Partner_Revenue_Amount",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Conversion_Counting_Type",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Conversion_Counting_Pct",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Conversion_Floodlight_Activity_Ids",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Fees",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Integration_Code",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Details",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Bid_Strategy_Type",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Bid_Strategy_Value",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Bid_Strategy_Unit",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Bid_Strategy_Do_Not_Exceed",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Creative_Assignments",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Geography_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Geography_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Language_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Language_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Device_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Device_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Browser_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Browser_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Digital_Content_Labels_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Brand_Safety_Sensitivity_Setting",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Brand_Safety_Custom_Settings",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Third_Party_Verification_Services",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Third_Party_Verification_Labels",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Channel_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Channel_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Site_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Site_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "App_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "App_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "App_Collection_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "App_Collection_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Category_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Category_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Keyword_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Keyword_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Keyword_List_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Audience_Targeting_Similar_Audiences",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Audience_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Audience_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Affinity_And_In_Market_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Affinity_And_In_Market_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Custom_List_Targeting",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Inventory_Source_Targeting_Authorized_Seller_Only",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Inventory_Source_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Inventory_Source_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Inventory_Source_Targeting_Target_New_Exchanges",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Daypart_Targeting",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Daypart_Targeting_Time_Zone",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Environment_Targeting",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Viewability_Targeting_Active_View",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Viewability_Targeting_Ad_Position_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Viewability_Targeting_Ad_Position_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Video_Ad_Position_Targeting",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Video_Player_Size_Targeting",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Demographic_Targeting_Gender",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Demographic_Targeting_Age",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Demographic_Targeting_Household_Income",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Demographic_Targeting_Parental_Status",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Connection_Speed_Targeting",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Carrier_Targeting_Include",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Carrier_Targeting_Exclude",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "Bid_Multipliers",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Video_Ad_Formats",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Mobile_Bid_Adjustment_Option",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Mobile_Bid_Adjustment_Percentage",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Desktop_Bid_Adjustment_Option",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Desktop_Bid_Adjustment_Percentage",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Tablet_Bid_Adjustment_Option",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Tablet_Bid_Adjustment_Percentage",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Connected_TV_Bid_Adjustment_Option",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Connected_TV_Bid_Adjustment_Percentage",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Category_Exclusions_Targeting",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Content_Filter",
+    "mode": "NULLABLE"
+}, {
+    "type": "STRING",
+    "name": "TrueView_Inventory_Source_Targeting",
+    "mode": "NULLABLE"
+}]
