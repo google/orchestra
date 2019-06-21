@@ -170,7 +170,7 @@ These can be set via the **Admin** section in the **Airflow UI** (accessible fro
   <tr>
    <td>BigQuery
    </td>
-   <td><strong>erf_bq_dataset</strong>
+   <td><strong>erf_bq_table</strong>
    </td>
    <td>The name of the BigQuery Dataset you wish to use - see image2 and documentation <a href="https://cloud.google.com/bigquery/docs/datasets">here</a>.
    </td>
