@@ -44,7 +44,7 @@ default_args = {
 
 conn_id = 'dt'
 cloud_project_id = models.Variable.get('cloud_project_id')
-bq_table = models.Variable.get('erf_bq_table')
+bq_dataset = models.Variable.get('erf_bq_dataset')
 dag_name = models.Variable.get('sequential_erf_dag_name')
 gcs_bucket = models.Variable.get('gcs_bucket')
 file_creation_date = yesterday()
@@ -52,7 +52,7 @@ file_creation_date = file_creation_date.strftime('%Y%m%d')
 dag = DAG(
     dag_name, catchup=False, default_args=default_args,
     schedule_interval='1 4 * * *')
-def create_tasks(dag, file_creation_date, gcs_bucket, bq_table, cloud_project_id, conn_id):
+def create_tasks(dag, file_creation_date, gcs_bucket, bq_dataset, cloud_project_id, conn_id):
   tasks = []
   private_entity_types =  models.Variable.get('private_entity_types').split(',')
   partner_ids = models.Variable.get('partner_ids').split(',')
@@ -63,7 +63,7 @@ def create_tasks(dag, file_creation_date, gcs_bucket, bq_table, cloud_project_id
       else:
         write_disposition = 'WRITE_APPEND'
       schema = Entity_Schema_Lookup[entity_type]
-      local_bq_table = '%s.%s' % (bq_table, entity_type)
+      local_bq_table = '%s.%s' % (bq_dataset, entity_type)
 
       task_id = 'multi_%s_%s_to_bq' % (entity_type, partner_id)
       multi =  dv360_erf_upload_bq.DV360ERFUploadBqOperator(
