@@ -46,7 +46,7 @@ private_entity_types =  [
 
 conn_id = 'dt'
 cloud_project_id = models.Variable.get('cloud_project_id')
-bq_table = models.Variable.get('erf_bq_table')
+bq_dataset = models.Variable.get('erf_bq_dataset')
 
 gcs_bucket = models.Variable.get('gcs_bucket')
 file_creation_date = yesterday()
@@ -57,7 +57,7 @@ dag = DAG(
 
 for entity_type in private_entity_types:
   schema = Entity_Schema_Lookup[entity_type]
-  local_bq_table = '%s.%s' % (bq_table, entity_type)
+  local_bq_table = '%s.%s' % (bq_dataset, entity_type)
 
   task_id = 'multi_%s_to_bq' % (entity_type)
   multi = DV360MultiERFUploadBqOperator(
