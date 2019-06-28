@@ -60,7 +60,7 @@ def download_and_transform_erf(self, partner_id=None):
   # will not work on all platform
   # https://docs.python.org/2/library/tempfile.html#tempfile.NamedTemporaryFile
   try:
-    temp_file = tempfile.NamedTemporaryFile(delete=False)
+    temp_file = tempfile.NamedTemporaryFile(mode='w', delete=False)
     temp_file.writelines(json_to_jsonlines(entity_read_file.name))
     temp_file.close()
     # Random here used as a nonce for writing multiple files at once.
