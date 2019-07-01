@@ -81,9 +81,9 @@ https://cloud.google.com/iam/docs/service-accounts
 
 
 ### Default Service Account
-By default you will see in the IAM section of your Project a default service account for Composer ("Cloud Composer Service Agent") and a default service account for Compute Engine ("Compute Engine Service Agent") - with their respective email addresses.
+By default you will see in the IAM section of your Project a default service account for Composer ("Cloud Composer Service Agent") and a default service account for Compute Engine ("Compute Engine default service account") - with their respective email addresses.
 
-These service accounts have access to all Cloud APIs enabled for your project, making them a good fit for Orchestra. We recommend you use in particular the Compute Engine Service Account (because it is the one used by the individual Compute Engine virtual machines that will run your tasks) as the main "Orchestra" service account.
+These service accounts have access to all Cloud APIs enabled for your project, making them a good fit for Orchestra. We recommend you use in particular the Compute Engine Service Account (i.e. "Compute Engine default service account" because it is the one used by the individual Compute Engine virtual machines that will run your tasks) as the main "Orchestra" service account.
 
 If you wish to use another account, you will have to give it access to BigQuery and full permissions for the Storage APIs.
 
@@ -351,7 +351,7 @@ First of all, you will need to enable your Service Account to access GMP Reporti
 
 1.  From the _API & Services > Library_ menu in the GCP console, **look for and enable the DoubleClick Bid Manager API** (DoubleClick Bid Manager is the former name of DV360)
     1.  If necessary, also enable the DCM/DFA Reporting And Trafficking API and/or the _DoubleClick Search API _for CM and SA360 reporting respectively.
-1.  From the IAM & admin > Service Accounts menu in the GCP console, **look for the default Compute Engine Service Account **(or your custom Service Account if you aren't using the default one) and click on the three-dots button under "Action" to **_Create a key_**. Pick the JSON option and store the file securely.
+1.  From the IAM & admin > Service Accounts menu in the GCP console, **look for the Compute Engine default service account **(or your custom Service Account if you aren't using the default one) and click on the three-dots button under "Action" to **_Create a key_**. Pick the JSON option and store the file securely.
 1.  **Upload the JSON keyfile** you've just downloaded to the Storage Bucket linked to your Composer environment (the same bucket where you're uploading DAG and other python files, but in another subfolder - e.g. "data")
 
 You are now ready to access the Connections list in the Airflow UI (_Admin > Connections_) and click on _Create_.
