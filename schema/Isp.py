@@ -29,4 +29,8 @@ Isp_Schema = [
     "type":"BOOLEAN",
     "mode":"NULLABLE",
   },
+  { "name":"secondary_criteria_id",
+    "type":"INTEGER",
+    "mode":"NULLABLE",
+  },
 ]
