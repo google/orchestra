@@ -16,27 +16,13 @@
 #
 ###########################################################################
 
-UserListAdvertiserPricing_Schema = [
-  { "name":"pricing",
-    "type":"RECORD",
-    "mode":"NULLABLE",
-    "fields":[
-      { "name":"cost_type",
-        "type":"STRING",
-        "mode":"NULLABLE",
-      },
-      { "name":"currency_code",
-        "type":"STRING",
-        "mode":"NULLABLE",
-      },
-      { "name":"cost_micros",
-        "type":"INTEGER",
-        "mode":"NULLABLE",
-      },
-    ]
-  },
-  { "name":"advertiser_id",
+AppCollection_Schema = [
+  { "name":"id",
     "type":"INTEGER",
+    "mode":"NULLABLE",
+  },
+  { "name":"name",
+    "type":"STRING",
     "mode":"NULLABLE",
   },
 ]
