@@ -51,6 +51,9 @@ from SelectionTarget import SelectionTarget_Schema
 from Isp import Isp_Schema
 from Partner import Partner_Schema
 from TargetList import TargetList_Schema
+from AppCollection import AppCollection_Schema
+from FloodlightActivity import FloodlightActivity_Schema
+from NegativeKeywordList import NegativeKeywordList_Schema
 
 Entity_Schema_Lookup = {
   'ExchangeSettings':ExchangeSettings_Schema,
@@ -87,4 +90,7 @@ Entity_Schema_Lookup = {
   'Isp':Isp_Schema,
   'Partner':Partner_Schema,
   'TargetList':TargetList_Schema,
+  'AppCollection':AppCollection_Schema,
+  'FloodlightActivity':FloodlightActivity_Schema,
+  'NegativeKeywordList':NegativeKeywordList_Schema,
 }
