@@ -18,8 +18,8 @@
 
 import logging
 from airflow import models
-from hooks.bq_hook import BigQueryBaseCursor
-from hooks.bq_hook import BigQueryHook
+from airflow.contrib.hooks.bigquery_hook import BigQueryHook
+from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
 from hooks.gcs_hook import GoogleCloudStorageHook
 from utils.download_and_transform_erf import download_and_transform_erf
 
@@ -72,8 +72,9 @@ class DV360ERFUploadBqOperator(models.BaseOperator):
     try:
       bq_base_cursor = BigQueryBaseCursor(self.service, self.cloud_project_id)
       bq_base_cursor.run_load(
-          self.bq_table,
-          self.schema, [entity_read_file_ndj],
+          destination_project_dataset_table=self.bq_table,
+          schema_fields=self.schema,
+          source_uris=[entity_read_file_ndj],
           source_format='NEWLINE_DELIMITED_JSON',
           write_disposition=self.write_disposition)
     finally:

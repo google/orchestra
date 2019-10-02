@@ -17,9 +17,9 @@
 ###########################################################################
 
 from airflow.models import BaseOperator
-from bq_hook import BigQueryHook
-from bq_hook import BigQueryBaseCursor
-from header_to_schema import report_schema
+from airflow.contrib.hooks.bigquery_hook import BigQueryHook
+from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
+from utils.header_to_schema import report_schema
 
 import pprint
 import logging
@@ -73,9 +73,9 @@ class CMUploadBqOperator(BaseOperator):
 
     logger.info("schema: ", self.schema)
 
-    bq_base_cursor.run_load(self.bq_table,
-                            self.schema,
-                            input_source_uris,
+    bq_base_cursor.run_load(destination_project_dataset_table=self.bq_table,
+                            schema_fields=self.schema,
+                            source_uris=input_source_uris,
                             skip_leading_rows=1,
                             max_bad_records=10,
                             write_disposition=self.write_disposition)

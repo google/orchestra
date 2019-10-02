@@ -22,8 +22,8 @@ from random import randint
 import tempfile
 import time
 from airflow import models
-from hooks.bq_hook import BigQueryBaseCursor
-from hooks.bq_hook import BigQueryHook
+from airflow.contrib.hooks.bigquery_hook import BigQueryHook
+from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
 from hooks.dv360_hook import DV360Hook
 from hooks.gcs_hook import GoogleCloudStorageHook
 from schema.sdf import SDF_VERSIONED_SCHEMA_TYPES
@@ -127,8 +127,9 @@ class DV360SDFToBQOperator(models.BaseOperator):
         bq_base_cursor = BigQueryBaseCursor(self.service, self.cloud_project_id)
         logger.info('Uploading SDF to BigQuery')
         bq_base_cursor.run_load(
-            bq_table,
-            schema, [sdf_file],
+            destination_project_dataset_table=bq_table,
+            schema_fields=schema,
+            source_uris=[sdf_file],
             source_format='CSV',
             skip_leading_rows=1,
             write_disposition=self.write_disposition)
