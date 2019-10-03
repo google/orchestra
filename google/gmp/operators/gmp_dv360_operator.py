@@ -78,6 +78,39 @@ class DisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
         context['task_instance'].xcom_push('query_id', response['queryId'])
 
 
+class DisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator):
+    """Runs a stored query to generate a report.
+
+    Attributes:
+      query_id: The ID of the query to run.
+      gcp_conn_id: The connection ID to use when fetching connection info.
+      delegate_to: The account to impersonate, if any.
+    """
+    def __init__(self,
+                 query_id,
+                 gcp_conn_id='google_cloud_default',
+                 delegate_to=None,
+                 *args,
+                 **kwargs):
+        super(DisplayVideo360RunReportOperator, self).__init__(*args, **kwargs)
+        self.conn_id = gcp_conn_id
+        self.delegate_to = delegate_to
+        self.service = None
+        self.query_id = query_id
+
+    def execute(self, context):
+        if self.service is None:
+            hook = DisplayVideo360Hook(
+                gcp_conn_id=self.conn_id,
+                delegate_to=self.delegate_to
+            )
+            self.service = hook.get_service()
+
+        request = self.service.queries().runquery(
+            queryId=self.query_id, body={})
+        request.execute()
+
+
 class DisplayVideo360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
     """Downloads a Display & Video 360 report into Google Cloud Storage.
 

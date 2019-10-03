@@ -20,7 +20,7 @@ from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
 from airflow import models
-from operators.dv360 import dv360_run_query_operator
+from google.gmp.operators.gmp_dv360_operator import DisplayVideo360RunReportOperator
 
 
 def yesterday():
@@ -41,9 +41,9 @@ dag_name = 'dv360_run_sdf_advertisers_report_dag'
 query_id = models.Variable.get('dv360_sdf_advertisers_report_id')
 dag = DAG(dag_name, catchup=False, default_args=default_args)
 
-run_query_task = dv360_run_query_operator.DV360RunQueryOperator(
+run_query_task = DisplayVideo360RunReportOperator(
     task_id='run_dv360_report',
-    conn_id=conn_id,
+    gcp_conn_id=conn_id,
     depends_on_past=False,
     query_id=query_id,
     dag=dag)
