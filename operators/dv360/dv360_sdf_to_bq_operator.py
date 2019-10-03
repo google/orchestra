@@ -25,7 +25,7 @@ from airflow import models
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
 from hooks.dv360_hook import DV360Hook
-from hooks.gcs_hook import GoogleCloudStorageHook
+from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from schema.sdf import SDF_VERSIONED_SCHEMA_TYPES
 logger = logging.getLogger(__name__)
 
