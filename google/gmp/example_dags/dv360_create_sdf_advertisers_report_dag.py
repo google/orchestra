@@ -21,6 +21,7 @@ from datetime import timedelta
 from airflow import DAG
 from airflow import models
 from google.gmp.operators.gmp_dv360_operator import DisplayVideo360CreateReportOperator
+from google.gmp.operators.gmp_dv360_operator import DisplayVideo360RunReportOperator
 
 
 CONN_ID = "gmp_reporting"
@@ -30,11 +31,6 @@ REPORT = """{
         "title": "Advertiser IDs",
         "dataRange": "LAST_30_DAYS",
         "format": "CSV",
-        "running": False,
-        "reportCount": 0,
-        "googleCloudStoragePathForLatestReport": "",
-        "latestReportRunTimeMs": "0",
-        "googleDrivePathForLatestReport": "",
         "sendNotification": False
     },
     "params": {
@@ -50,12 +46,8 @@ REPORT = """{
         "includeInviteData": True
     },
     "schedule": {
-        "frequency": "DAILY",
-        "endTimeMs": "1861873200000",
-        "nextRunMinuteOfDay": 0,
-        "nextRunTimezoneCode": "Europe/London"
-    },
-    "timezoneCode": "Europe/London"
+        "frequency": "ONE_TIME",
+    }
 }"""
 
 
@@ -77,10 +69,20 @@ dag = DAG(
     "dv360_create_sdf_advertisers_report_dag",
     default_args=default_args,
     schedule_interval=None)
+
 partner_ids = models.Variable.get("partner_ids").split(",")
-create_query_task = DisplayVideo360CreateReportOperator(
-    task_id="create_dv360_report",
+create_report = DisplayVideo360CreateReportOperator(
+    task_id="create_report",
     gcp_conn_id=CONN_ID,
     report=REPORT,
     params={"partners": partner_ids},
     dag=dag)
+query_id = "{{ task_instance.xcom_pull('create_report', key='query_id') }}"
+
+run_report = DisplayVideo360RunReportOperator(
+    task_id='run_report',
+    gcp_conn_id=CONN_ID,
+    query_id=query_id,
+    dag=dag)
+
+create_report >> run_report

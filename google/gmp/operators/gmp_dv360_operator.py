@@ -82,10 +82,13 @@ class DisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator):
     """Runs a stored query to generate a report.
 
     Attributes:
-      query_id: The ID of the query to run.
+      query_id: The ID of the query to run. (templated)
       gcp_conn_id: The connection ID to use when fetching connection info.
       delegate_to: The account to impersonate, if any.
     """
+
+    template_fields = ['query_id']
+
     def __init__(self,
                  query_id,
                  gcp_conn_id='google_cloud_default',
