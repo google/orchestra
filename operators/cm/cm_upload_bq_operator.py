@@ -19,7 +19,7 @@
 from airflow.models import BaseOperator
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
-from utils.header_to_schema import report_schema
+from google.gmp.utils.header_to_schema import report_schema
 
 import pprint
 import logging

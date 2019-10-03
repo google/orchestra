@@ -17,7 +17,7 @@
 ###########################################################################
 
 
-from gcs_hook import GoogleCloudStorageHook
+from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow import models
 
 import tempfile

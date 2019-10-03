@@ -18,10 +18,10 @@
 
 import logging
 from airflow import models
-from bq_hook import BigQueryBaseCursor
-from bq_hook import BigQueryHook
-from utils.download_and_transform_erf import download_and_transform_erf
-from gcs_hook import GoogleCloudStorageHook
+from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
+from airflow.contrib.hooks.bigquery_hook import BigQueryHook
+from google.gmp.utils.download_and_transform_erf import download_and_transform_erf
+from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 
 
 logger = logging.getLogger(__name__)

@@ -18,7 +18,7 @@
 
 
 import re
-from Lookup import DCM_Field_Lookup
+from google.gmp.utils.Lookup import DCM_Field_Lookup
 
 RE_HUMAN = re.compile('[^0-9a-zA-Z]+')
 
