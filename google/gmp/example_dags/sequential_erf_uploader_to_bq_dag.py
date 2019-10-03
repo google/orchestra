@@ -23,7 +23,7 @@ from datetime import timedelta
 from airflow import DAG
 from airflow import models
 from schema import Entity_Schema_Lookup
-from dv360_multi_file_upload_erf import DV360MultiERFUploadBqOperator
+from operators.dv360 import dv360_erf_upload_bq
 
 def yesterday():
   return datetime.today() - timedelta(days=1)
@@ -38,35 +38,49 @@ default_args = {
   'retry_delay': timedelta(seconds=10),
 }
 
-private_entity_types =  [
- 'Advertiser', 'Campaign', 'Creative', 'CustomAffinity', 'InsertionOrder',
- 'InventorySource', 'LineItem', 'Partner', 'Pixel',
- 'UniversalChannel'
-]
+
 
 conn_id = 'dt'
 cloud_project_id = models.Variable.get('cloud_project_id')
 bq_dataset = models.Variable.get('erf_bq_dataset')
-
+dag_name = models.Variable.get('sequential_erf_dag_name')
 gcs_bucket = models.Variable.get('gcs_bucket')
 file_creation_date = yesterday()
 file_creation_date = file_creation_date.strftime('%Y%m%d')
 dag = DAG(
-    'multi_erf_to_bq', default_args=default_args, schedule_interval=timedelta(1))
+    dag_name, catchup=False, default_args=default_args,
+    schedule_interval='1 4 * * *')
+def create_tasks(dag, file_creation_date, gcs_bucket, bq_dataset, cloud_project_id, conn_id):
+  tasks = []
+  private_entity_types =  models.Variable.get('private_entity_types').split(',')
+  partner_ids = models.Variable.get('partner_ids').split(',')
+  for entity_type in private_entity_types:
+    for i, partner_id in enumerate(partner_ids):
+      if i == 0:
+        write_disposition = 'WRITE_TRUNCATE'
+      else:
+        write_disposition = 'WRITE_APPEND'
+      schema = Entity_Schema_Lookup[entity_type]
+      local_bq_table = '%s.%s' % (bq_dataset, entity_type)
 
+      task_id = 'multi_%s_%s_to_bq' % (entity_type, partner_id)
+      multi =  dv360_erf_upload_bq.DV360ERFUploadBqOperator(
+      task_id=task_id,
+      entity_type=entity_type,
+      file_creation_date=file_creation_date,
+      depends_on_past=False,
+      bq_table=local_bq_table,
+      gcs_bucket=gcs_bucket,
+      cloud_project_id=cloud_project_id,
+      schema=schema,
+      partner_id=partner_id,
+      write_disposition=write_disposition,
+      trigger_rule='all_done',
+      dag=dag)
+      tasks.append(multi)
+  return tasks
 
-for entity_type in private_entity_types:
-  schema = Entity_Schema_Lookup[entity_type]
-  local_bq_table = '%s.%s' % (bq_dataset, entity_type)
+tasks = create_tasks(dag, file_creation_date, gcs_bucket, bq_dataset, cloud_project_id, conn_id)
 
-  task_id = 'multi_%s_to_bq' % (entity_type)
-  multi = DV360MultiERFUploadBqOperator(
-  task_id=task_id,
-  entity_type=entity_type,
-  file_creation_date=file_creation_date,
-  depends_on_past=False,
-  bq_table=local_bq_table,
-  gcs_bucket=gcs_bucket,
-  cloud_project_id=cloud_project_id,
-  schema=schema,
-  dag=dag)
+for i, task in enumerate(tasks[1:-1]):
+  task << tasks[i]

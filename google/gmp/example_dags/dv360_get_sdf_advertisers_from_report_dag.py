@@ -16,8 +16,6 @@
 #
 ###########################################################################
 """Example DAG which extracts Advertiser IDs from a DV360 report."""
-import sys
-sys.path.append('..')
 from datetime import datetime
 from datetime import timedelta
 from airflow import DAG

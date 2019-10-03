@@ -34,8 +34,6 @@ DAG requirements:
     gcs_bucket: GCS bucket where DV360 SDF files will be stored for processing.
       Just the bucket name, no *gs://* prefix
 """
-import sys
-sys.path.append('..')
 from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
