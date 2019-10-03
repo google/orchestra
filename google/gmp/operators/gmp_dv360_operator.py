@@ -482,24 +482,22 @@ class DisplayVideo360SDFAdvertiserFromReportOperator(GoogleMarketingPlatformBase
     Get Partner and Advertiser Ids from a report and populate an airflow variable.
     """
 
+    template_fields = ['report_url']
+
     def __init__(self,
+                 report_url,
                  gcp_conn_id='google_cloud_default',
-                 report_type='',
                  *args,
                  **kwargs):
         super(DisplayVideo360SDFAdvertiserFromReportOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.service = None
-        self.report_type = report_type
+        self.report_url = report_url
 
     def execute(self, context):
-        url = context['task_instance'].xcom_pull(
-            task_ids=None,
-            dag_id=self.dag.dag_id,
-            key='%s_dv360_report_file_path' % self.report_type)
         try:
             report_file = tempfile.NamedTemporaryFile(delete=False)
-            file_download = requests.get(url, stream=True)
+            file_download = requests.get(self.report_url, stream=True)
             for chunk in file_download.iter_content(chunk_size=1024 * 1024):
                 report_file.write(chunk)
             report_file.close()

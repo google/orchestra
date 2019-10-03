@@ -26,9 +26,7 @@ DAG requirements:
       will be passed in a single API call (e.g: 10).
     dv360_sdf_advertisers: A dictionary where key is partner ID and value is a
       list of advertisers under this partner (e.g.:{"234340": ["2335631",
-      "2099336],"100832": ["1592931"]}). You can use
-      dv360_get_sdf_advertisers_from_report_dag.py to populate this variable
-      from a report you've created.
+      "2099336],"100832": ["1592931"]}).
     sdf_bq_dataset: Name of BQ data set where SDF tables will be created.
     cloud_project_id: Your cloud project ID (e.g:orchestra-sandbox).
     gcs_bucket: GCS bucket where DV360 SDF files will be stored for processing.

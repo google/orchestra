@@ -22,6 +22,9 @@ from airflow import DAG
 from airflow import models
 from google.gmp.operators.gmp_dv360_operator import DisplayVideo360CreateReportOperator
 from google.gmp.operators.gmp_dv360_operator import DisplayVideo360RunReportOperator
+from google.gmp.sensors.gmp_dv360_sensor import DisplayVideo360ReportSensor
+from google.gmp.operators.gmp_dv360_operator import DisplayVideo360DeleteReportOperator
+from google.gmp.operators.gmp_dv360_operator import DisplayVideo360SDFAdvertiserFromReportOperator
 
 
 CONN_ID = "gmp_reporting"
@@ -80,9 +83,29 @@ create_report = DisplayVideo360CreateReportOperator(
 query_id = "{{ task_instance.xcom_pull('create_report', key='query_id') }}"
 
 run_report = DisplayVideo360RunReportOperator(
-    task_id='run_report',
+    task_id="run_report",
     gcp_conn_id=CONN_ID,
     query_id=query_id,
     dag=dag)
 
-create_report >> run_report
+wait_for_report = DisplayVideo360ReportSensor(
+    task_id="wait_for_report",
+    gcp_conn_id=CONN_ID,
+    query_id=query_id,
+    dag=dag)
+report_url = "{{ task_instance.xcom_pull('wait_for_report', key='report_url') }}"
+
+extract_advertisers = DisplayVideo360SDFAdvertiserFromReportOperator(
+    task_id='extract_advertisers',
+    conn_id=CONN_ID,
+    depends_on_past=False,
+    report_url=report_url,
+    dag=dag)
+
+delete_report = DisplayVideo360DeleteReportOperator(
+    task_id="delete_report",
+    gcp_conn_id=CONN_ID,
+    query_id=query_id,
+    dag=dag)
+
+create_report >> run_report >> wait_for_report >> extract_advertisers >> delete_report
