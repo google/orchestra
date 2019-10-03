@@ -24,7 +24,7 @@ import time
 from airflow import models
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
-from hooks.dv360_hook import DV360Hook
+from google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from schema.sdf import SDF_VERSIONED_SCHEMA_TYPES
 logger = logging.getLogger(__name__)
@@ -81,7 +81,7 @@ class DV360SDFToBQOperator(models.BaseOperator):
 
   def execute(self, context):
     if (self.service == None):
-      hook = DV360Hook(dv360_conn_id=self.conn_id)
+      hook = DisplayVideo360Hook(gcp_conn_id=self.conn_id)
       self.service = hook.get_service()
 
     request_body = {

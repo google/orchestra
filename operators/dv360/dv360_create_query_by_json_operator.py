@@ -25,7 +25,7 @@ ID of the created report to both xcom and an airflow variable.
 import json
 import logging
 from airflow import models
-from hooks.dv360_hook import DV360Hook
+from google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ class DV360CreateQueryOperator(models.BaseOperator):
 
 
   def execute(self, context):
-    service = DV360Hook(dv360_conn_id=self.dv360_conn_id)
+    service = DisplayVideo360Hook(gcp_conn_id=self.dv360_conn_id)
     service = service.get_service()
 
     logger.info(self.body)

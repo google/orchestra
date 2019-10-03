@@ -16,7 +16,7 @@
 #
 ###########################################################################
 
-from hooks.dv360_hook import DV360Hook
+from google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
 from airflow.models import BaseOperator
 import logging
 logger = logging.getLogger(__name__)
@@ -39,7 +39,7 @@ class DV360GetReportFileOperator(BaseOperator):
 
   def execute(self, context):
     if self.service is None:
-      hook = DV360Hook(dv360_conn_id=self.conn_id)
+      hook = DisplayVideo360Hook(gcp_conn_id=self.conn_id)
       self.service = hook.get_service()
     request = self.service.reports().listreports(queryId=self.query_id)
     logger.info(dir(request))
