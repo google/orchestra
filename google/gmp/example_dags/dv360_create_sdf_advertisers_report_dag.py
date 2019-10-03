@@ -20,27 +20,11 @@ from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
 from airflow import models
-from operators.dv360 import dv360_create_query_by_json_operator
-import json
+from google.gmp.operators.gmp_dv360_operator import DisplayVideo360CreateReportOperator
 
 
-def yesterday():
-  return datetime.today() - timedelta(days=1)
-
-
-default_args = {
-    "owner": "airflow",
-    "start_date": yesterday(),
-    "email_on_failure": False,
-    "email_on_retry": False,
-    "retries": 1,
-    "retry_delay": timedelta(seconds=10),
-}
-
-conn_id = "gmp_reporting"
-dag_name = "dv360_create_sdf_advertisers_report_dag"
-output_var = "dv360_sdf_advertisers_report_id"
-body = {
+CONN_ID = "gmp_reporting"
+REPORT = """{
     "kind": "doubleclickbidmanager#query",
     "metadata": {
         "title": "Advertiser IDs",
@@ -56,7 +40,12 @@ body = {
     "params": {
         "type": "TYPE_GENERAL",
         "groupBys": ["FILTER_ADVERTISER", "FILTER_PARTNER"],
-        "filters": [],
+        "filters": [
+        {%- for partner in params.partners %}
+            {% if not loop.first %}, {% endif -%}
+            {"type": "FILTER_PARTNER", "value": {{ partner }}}
+        {%- endfor -%}
+        ],
         "metrics": ["METRIC_IMPRESSIONS"],
         "includeInviteData": True
     },
@@ -67,24 +56,31 @@ body = {
         "nextRunTimezoneCode": "Europe/London"
     },
     "timezoneCode": "Europe/London"
+}"""
+
+
+def yesterday():
+  return datetime.today() - timedelta(days=1)
+
+
+default_args = {
+    "owner": "airflow",
+    "start_date": yesterday(),
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 1,
+    "retry_delay": timedelta(seconds=10),
 }
 
-partner_ids = models.Variable.get("partner_ids").split(",")
 
-# Add partner ID filters using partner_id variable
-for partner_id in partner_ids:
-  body.get("params").get("filters").append({
-      "type": "FILTER_PARTNER",
-      "value": partner_id
-  })
-
-body = json.dumps(body)
 dag = DAG(
-    dag_name, catchup=False, default_args=default_args, schedule_interval=None)
-create_query_task = dv360_create_query_by_json_operator.DV360CreateQueryOperator(
+    "dv360_create_sdf_advertisers_report_dag",
+    default_args=default_args,
+    schedule_interval=None)
+partner_ids = models.Variable.get("partner_ids").split(",")
+create_query_task = DisplayVideo360CreateReportOperator(
     task_id="create_dv360_report",
-    conn_id=conn_id,
-    depends_on_past=False,
-    body=body,
-    output_var=output_var,
+    gcp_conn_id=CONN_ID,
+    report=REPORT,
+    params={"partners": partner_ids},
     dag=dag)
