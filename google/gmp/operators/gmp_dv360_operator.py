@@ -278,7 +278,7 @@ class DisplayVideo360ERFUploadBqOperator(GoogleMarketingPlatformBaseOperator):
             self.gcs_hook.delete(self.gcs_bucket, filename)
 
 
-class DisplayVideoMultiERFUploadBQOperator(GoogleMarketingPlatformBaseOperator):
+class DisplayVideo360MultiERFUploadBQOperator(GoogleMarketingPlatformBaseOperator):
     """Upload Multiple Entity Read Files to specified big query dataset.
     """
 
@@ -296,7 +296,7 @@ class DisplayVideoMultiERFUploadBQOperator(GoogleMarketingPlatformBaseOperator):
                  erf_bucket=None,
                  *args,
                  **kwargs):
-        super(DisplayVideoMultiERFUploadBQOperator, self).__init__(*args, **kwargs)
+        super(DisplayVideo360MultiERFUploadBQOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.service = None
         self.bq_hook = None
@@ -441,7 +441,7 @@ class DisplayVideo360SDFToBqOperator(GoogleMarketingPlatformBaseOperator):
                 self.gcs_hook.delete(self.gcs_bucket, filename)
 
 
-class DisplayVideoSDFAdvertiserFromReportOperator(GoogleMarketingPlatformBaseOperator):
+class DisplayVideo360SDFAdvertiserFromReportOperator(GoogleMarketingPlatformBaseOperator):
     """
     Get Partner and Advertiser Ids from a report and populate an airflow variable.
     """
@@ -451,7 +451,7 @@ class DisplayVideoSDFAdvertiserFromReportOperator(GoogleMarketingPlatformBaseOpe
                  report_type='',
                  *args,
                  **kwargs):
-        super(DisplayVideoSDFAdvertiserFromReportOperator, self).__init__(*args, **kwargs)
+        super(DisplayVideo360SDFAdvertiserFromReportOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.service = None
         self.report_type = report_type
@@ -500,7 +500,7 @@ class DisplayVideoSDFAdvertiserFromReportOperator(GoogleMarketingPlatformBaseOpe
                 os.unlink(report_file.name)
 
 
-class DisplayVideoDownloadReportByFilePathOperator(GoogleMarketingPlatformBaseOperator):
+class DisplayVideo360DownloadReportByFilePathOperator(GoogleMarketingPlatformBaseOperator):
     """Download report file, this is the same as the CM report file downloader
       but doesn't require profile id.
 
@@ -516,7 +516,7 @@ class DisplayVideoDownloadReportByFilePathOperator(GoogleMarketingPlatformBaseOp
                  report_type='',
                  *args,
                  **kwargs):
-        super(DisplayVideoDownloadReportByFilePathOperator, self).__init__(*args, **kwargs)
+        super(DisplayVideo360DownloadReportByFilePathOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.service = None
         self.gcs_hook = None
