@@ -17,7 +17,7 @@
 ###########################################################################
 
 from airflow.operators import sensors
-from hooks.cm_reporting_hook import DcmReportingHook
+from google.gmp.hooks.gmp_cm_hook import CampaignManagerReportingHook
 
 import pprint
 
@@ -35,7 +35,7 @@ class DV360ReportFileAvailableSensor(sensors.BaseSensorOperator):
 
   def poke(self, context):
     if(self.service == None):
-      hook = DcmReportingHook(dcm_report_conn_id=self.conn_id)
+      hook = CampaignManagerReportingHook(gcp_conn_id=self.conn_id)
       self.service = hook.get_service()
 
     reportFileId = context['task_instance'].xcom_pull(
