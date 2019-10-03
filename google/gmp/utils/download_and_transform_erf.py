@@ -51,7 +51,7 @@ def download_and_transform_erf(self, partner_id=None):
   else:
     self.erf_bucket = 'gdbm-public'
 
-  gcs_hook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.conn_id)
+  gcs_hook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.gcp_conn_id)
   entity_read_file = tempfile.NamedTemporaryFile(delete=False)
   gcs_hook.download(self.erf_bucket, self.erf_object, entity_read_file.name)
   temp_file = None
