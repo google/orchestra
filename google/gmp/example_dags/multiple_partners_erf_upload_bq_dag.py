@@ -23,7 +23,8 @@ from datetime import timedelta
 from airflow import DAG
 from airflow import models
 from schema import Entity_Schema_Lookup
-from operators.dv360.dv360_multi_file_upload_erf import DV360MultiERFUploadBqOperator
+from google.gmp.operators.gmp_dv360_operator import DisplayVideo360MultiERFUploadBQOperator
+
 
 def yesterday():
   return datetime.today() - timedelta(days=1)
@@ -35,13 +36,13 @@ default_args = {
   'email_on_failure': False,
   'email_on_retry': False,
   'retries': 1,
-  'retry_delay': timedelta(seconds=10),
+  'retry_delay': timedelta(seconds=10)
 }
 
-private_entity_types =  [
- 'Advertiser', 'Campaign', 'Creative', 'CustomAffinity', 'InsertionOrder',
- 'InventorySource', 'LineItem', 'Partner', 'Pixel',
- 'UniversalChannel'
+private_entity_types = [
+  'Advertiser', 'Campaign', 'Creative', 'CustomAffinity', 'InsertionOrder',
+  'InventorySource', 'LineItem', 'Partner', 'Pixel',
+  'UniversalChannel'
 ]
 
 conn_id = 'dt'
@@ -52,21 +53,23 @@ gcs_bucket = models.Variable.get('gcs_bucket')
 file_creation_date = yesterday()
 file_creation_date = file_creation_date.strftime('%Y%m%d')
 dag = DAG(
-    'multi_erf_to_bq', default_args=default_args, schedule_interval=timedelta(1))
-
+    'multi_erf_to_bq',
+    default_args=default_args,
+    schedule_interval=timedelta(1))
 
 for entity_type in private_entity_types:
-  schema = Entity_Schema_Lookup[entity_type]
-  local_bq_table = '%s.%s' % (bq_dataset, entity_type)
+    schema = Entity_Schema_Lookup[entity_type]
+    local_bq_table = '%s.%s' % (bq_dataset, entity_type)
 
-  task_id = 'multi_%s_to_bq' % (entity_type)
-  multi = DV360MultiERFUploadBqOperator(
-  task_id=task_id,
-  entity_type=entity_type,
-  file_creation_date=file_creation_date,
-  depends_on_past=False,
-  bq_table=local_bq_table,
-  gcs_bucket=gcs_bucket,
-  cloud_project_id=cloud_project_id,
-  schema=schema,
-  dag=dag)
+    task_id = 'multi_%s_to_bq' % entity_type
+    multi = DisplayVideo360MultiERFUploadBQOperator(
+      gcp_conn_id=conn_id,
+      task_id=task_id,
+      entity_type=entity_type,
+      file_creation_date=file_creation_date,
+      depends_on_past=False,
+      bq_table=local_bq_table,
+      gcs_bucket=gcs_bucket,
+      cloud_project_id=cloud_project_id,
+      schema=schema,
+      dag=dag)
