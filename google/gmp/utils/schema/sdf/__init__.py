@@ -16,16 +16,6 @@
 #
 ###########################################################################
 
-from Ad import SDF_Ad_Schema
-from AdGroup import SDF_AdGroup_Schema
-from Campaign import SDF_Campaign_Schema
-from InsertionOrder import SDF_InsertionOrder_Schema
-from LineItem import SDF_LineItem_Schema
+from google.gmp.utils.schema.sdf.v4_2 import SDF_V4_2_SCHEMA_TYPES
 
-SDF_V4_2_SCHEMA_TYPES = {
-    'LINE_ITEM': SDF_LineItem_Schema,
-    'CAMPAIGN': SDF_Campaign_Schema,
-    'AD': SDF_Ad_Schema,
-    'AD_GROUP': SDF_AdGroup_Schema,
-    'INSERTION_ORDER': SDF_InsertionOrder_Schema
-}
+SDF_VERSIONED_SCHEMA_TYPES = {'4.2': SDF_V4_2_SCHEMA_TYPES}

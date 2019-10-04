@@ -69,7 +69,7 @@ default_args = {
 
 
 dag = DAG(
-    "dv360_create_sdf_advertisers_report_dag",
+    "dv360_record_sdf_advertisers_dag",
     default_args=default_args,
     schedule_interval=None)
 
@@ -95,11 +95,11 @@ wait_for_report = DisplayVideo360ReportSensor(
     dag=dag)
 report_url = "{{ task_instance.xcom_pull('wait_for_report', key='report_url') }}"
 
-extract_advertisers = DisplayVideo360SDFAdvertiserFromReportOperator(
-    task_id='extract_advertisers',
+record_advertisers = DisplayVideo360SDFAdvertiserFromReportOperator(
+    task_id='record_advertisers',
     conn_id=CONN_ID,
-    depends_on_past=False,
     report_url=report_url,
+    variable_name='dv360_sdf_advertisers',
     dag=dag)
 
 delete_report = DisplayVideo360DeleteReportOperator(
@@ -108,4 +108,4 @@ delete_report = DisplayVideo360DeleteReportOperator(
     query_id=query_id,
     dag=dag)
 
-create_report >> run_report >> wait_for_report >> extract_advertisers >> delete_report
+create_report >> run_report >> wait_for_report >> record_advertisers >> delete_report

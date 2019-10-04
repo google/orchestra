@@ -36,7 +36,7 @@ from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
 from airflow import models
-from operators.dv360 import dv360_sdf_to_bq_operator
+from google.gmp.operators.gmp_dv360_operator import DisplayVideo360SDFToBqOperator
 import logging
 import json
 logger = logging.getLogger(__name__)
@@ -91,10 +91,9 @@ for partner, advertisers in advertisers_per_partner.items():
     if first:
       write_disposition = 'WRITE_TRUNCATE'
       first = False
-    task = dv360_sdf_to_bq_operator.DV360SDFToBQOperator(
+    task = DisplayVideo360SDFToBqOperator(
         task_id=task_id,
-        conn_id=conn_id,
-        depends_on_past=False,
+        gcp_conn_id=conn_id,
         cloud_project_id=cloud_project_id,
         gcs_bucket=gcs_bucket,
         bq_dataset=bq_dataset,

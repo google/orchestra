@@ -31,7 +31,7 @@ from google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
 from google.gmp.operators.gmp_base_operator import GoogleMarketingPlatformBaseOperator
 from google.gmp.utils.download_and_transform_erf import download_and_transform_erf
 
-from schema.sdf import SDF_VERSIONED_SCHEMA_TYPES
+from google.gmp.utils.schema.sdf import SDF_VERSIONED_SCHEMA_TYPES
 logger = logging.getLogger(__name__)
 
 
@@ -482,10 +482,11 @@ class DisplayVideo360SDFAdvertiserFromReportOperator(GoogleMarketingPlatformBase
     Get Partner and Advertiser Ids from a report and populate an airflow variable.
     """
 
-    template_fields = ['report_url']
+    template_fields = ['report_url', 'variable_name']
 
     def __init__(self,
                  report_url,
+                 variable_name,
                  gcp_conn_id='google_cloud_default',
                  *args,
                  **kwargs):
@@ -493,6 +494,7 @@ class DisplayVideo360SDFAdvertiserFromReportOperator(GoogleMarketingPlatformBase
         self.gcp_conn_id = gcp_conn_id
         self.service = None
         self.report_url = report_url
+        self.variable_name = variable_name
 
     def execute(self, context):
         try:
@@ -527,7 +529,7 @@ class DisplayVideo360SDFAdvertiserFromReportOperator(GoogleMarketingPlatformBase
                                 logger.info(message)
                     else:
                         break
-            models.Variable.set('dv360_sdf_advertisers', json.dumps(advertisers))
+            models.Variable.set(self.variable_name, json.dumps(advertisers))
         finally:
             if report_file:
                 report_file.close()
