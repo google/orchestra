@@ -20,7 +20,7 @@ import logging
 
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
-from google.gmp.hooks.gmp_cm_hook import CampaignManagerReportingHook
+from orchestra.google.gmp.hooks.gmp_cm_hook import CampaignManagerReportingHook
 
 logger = logging.getLogger(__name__)
 

@@ -36,7 +36,7 @@ from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
 from airflow import models
-from google.gmp.operators.gmp_dv360_operator import DisplayVideo360SDFToBqOperator
+from orchestra.google.gmp.operators.gmp_dv360_operator import DisplayVideo360SDFToBqOperator
 import logging
 import json
 logger = logging.getLogger(__name__)

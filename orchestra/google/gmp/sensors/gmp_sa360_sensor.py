@@ -18,7 +18,7 @@
 """
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
-from google.gmp.hooks.gmp_sa360_hook import SearchAds360Hook
+from orchestra.google.gmp.hooks.gmp_sa360_hook import SearchAds360Hook
 
 
 class SearchAds360ReportSensor(BaseSensorOperator):

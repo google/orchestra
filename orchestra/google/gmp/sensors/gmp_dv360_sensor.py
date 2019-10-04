@@ -18,7 +18,7 @@
 """
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
-from google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
+from orchestra.google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
 
 
 class DisplayVideo360ReportSensor(BaseSensorOperator):

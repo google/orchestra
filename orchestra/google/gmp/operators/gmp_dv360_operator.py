@@ -27,11 +27,11 @@ from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
 
-from google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
-from google.gmp.operators.gmp_base_operator import GoogleMarketingPlatformBaseOperator
-from google.gmp.utils.download_and_transform_erf import download_and_transform_erf
+from orchestra.google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
+from orchestra.google.gmp.operators.gmp_base_operator import GoogleMarketingPlatformBaseOperator
+from orchestra.google.gmp.utils import download_and_transform_erf
 
-from google.gmp.utils.schema.sdf import SDF_VERSIONED_SCHEMA_TYPES
+from orchestra.google.gmp.utils.schema.sdf import SDF_VERSIONED_SCHEMA_TYPES
 logger = logging.getLogger(__name__)
 
 

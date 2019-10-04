@@ -22,8 +22,8 @@ from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
 from airflow import models
-from google.gmp.utils.schema import Entity_Schema_Lookup
-from google.gmp.operators.gmp_dv360_operator import DisplayVideo360MultiERFUploadBQOperator
+from orchestra.google.gmp.utils.schema import Entity_Schema_Lookup
+from orchestra.google.gmp.operators.gmp_dv360_operator import DisplayVideo360MultiERFUploadBQOperator
 
 
 def yesterday():
