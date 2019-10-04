@@ -28,6 +28,7 @@ from orchestra.google.gmp.operators.gmp_dv360_operator import DisplayVideo360SDF
 
 
 CONN_ID = "gmp_reporting"
+PARTNER_IDS = models.Variable.get("partner_ids").split(",")
 REPORT = """{
     "kind": "doubleclickbidmanager#query",
     "metadata": {
@@ -73,12 +74,11 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=None)
 
-partner_ids = models.Variable.get("partner_ids").split(",")
 create_report = DisplayVideo360CreateReportOperator(
     task_id="create_report",
     gcp_conn_id=CONN_ID,
     report=REPORT,
-    params={"partners": partner_ids},
+    params={"partners": PARTNER_IDS},
     dag=dag)
 query_id = "{{ task_instance.xcom_pull('create_report', key='query_id') }}"
 

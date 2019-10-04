@@ -372,25 +372,24 @@ class DisplayVideo360MultiERFUploadBQOperator(GoogleMarketingPlatformBaseOperato
             self.gcs_hook.delete(self.gcs_bucket, filename)
 
 
-DEFAULT_SDF_TABLE_NAMES = {
-    'LINE_ITEM': 'SDFLineItem',
-    'AD_GROUP': 'SDFAdGroup',
-    'AD': 'SDFAd',
-    'INSERTION_ORDER': 'SDFInsertionOrder',
-    'CAMPAIGN': 'SDFCampaign'
-}
-
-SDF_API_RESPONSE_KEYS = {
-    'LINE_ITEM': 'lineItems',
-    'AD_GROUP': 'adGroups',
-    'AD': 'ads',
-    'INSERTION_ORDER': 'insertionOrders',
-    'CAMPAIGN': 'campaigns'
-}
-
-
 class DisplayVideo360SDFToBqOperator(GoogleMarketingPlatformBaseOperator):
     """Make a request to SDF API and upload the data to BQ."""
+
+    DEFAULT_SDF_TABLE_NAMES = {
+        'LINE_ITEM': 'SDFLineItem',
+        'AD_GROUP': 'SDFAdGroup',
+        'AD': 'SDFAd',
+        'INSERTION_ORDER': 'SDFInsertionOrder',
+        'CAMPAIGN': 'SDFCampaign'
+    }
+
+    SDF_API_RESPONSE_KEYS = {
+        'LINE_ITEM': 'lineItems',
+        'AD_GROUP': 'adGroups',
+        'AD': 'ads',
+        'INSERTION_ORDER': 'insertionOrders',
+        'CAMPAIGN': 'campaigns'
+    }
 
     def __init__(self,
                  gcp_conn_id='google_cloud_default',
