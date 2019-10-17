@@ -25,8 +25,8 @@ from airflow import models
 from orchestra.google.marketing_platform.utils.schema.erf import (
     Entity_Schema_Lookup
 )
-from orchestra.google.marketing_platform.operators.gmp_dv360_operator import (
-    DisplayVideo360ERFUploadBqOperator
+from orchestra.google.marketing_platform.operators.display_video_360 import (
+  GoogleDisplayVideo360ERFToBigQueryOperator
 )
 
 
@@ -48,7 +48,7 @@ def create_tasks(target_dag, creation_date, bucket, dataset, gcp_id, gcp_conn_id
             local_bq_table = '%s.%s' % (dataset, entity_type)
 
             task_id = 'multi_%s_%s_to_bq' % (entity_type, partner_id)
-            multi = DisplayVideo360ERFUploadBqOperator(
+            multi = GoogleDisplayVideo360ERFToBigQueryOperator(
                 gcp_conn_id=gcp_conn_id,
                 task_id=task_id,
                 entity_type=entity_type,

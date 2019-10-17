@@ -18,12 +18,12 @@
 """
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
-from orchestra.google.marketing_platform.hooks.gmp_dv360_hook import (
-    DisplayVideo360Hook
+from orchestra.google.marketing_platform.hooks.display_video_360 import (
+    GoogleDisplayVideo360Hook
 )
 
 
-class DisplayVideo360ReportSensor(BaseSensorOperator):
+class GoogleDisplayVideo360ReportSensor(BaseSensorOperator):
     """Sensor for detecting the completion of DV360 reports.
 
     Waits for a Display & Video 360 query to complete and returns the latest
@@ -53,7 +53,7 @@ class DisplayVideo360ReportSensor(BaseSensorOperator):
                  mode='reschedule',
                  *args,
                  **kwargs):
-        super(DisplayVideo360ReportSensor, self).__init__(
+        super(GoogleDisplayVideo360ReportSensor, self).__init__(
             poke_interval=poke_interval,
             timeout=timeout,
             mode=mode,
@@ -66,7 +66,7 @@ class DisplayVideo360ReportSensor(BaseSensorOperator):
 
     def poke(self, context):
         if self.hook is None:
-            self.hook = DisplayVideo360Hook(
+            self.hook = GoogleDisplayVideo360Hook(
                 gcp_conn_id=self.gcp_conn_id,
                 delegate_to=self.delegate_to)
 

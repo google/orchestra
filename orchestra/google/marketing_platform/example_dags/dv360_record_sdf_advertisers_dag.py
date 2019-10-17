@@ -20,14 +20,14 @@ from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
 from airflow import models
-from orchestra.google.marketing_platform.operators.gmp_dv360_operator import (
-  DisplayVideo360CreateReportOperator,
-  DisplayVideo360RunReportOperator,
-  DisplayVideo360DeleteReportOperator,
-  DisplayVideo360SDFAdvertiserFromReportOperator
+from orchestra.google.marketing_platform.operators.display_video_360 import (
+  GoogleDisplayVideo360CreateReportOperator,
+  GoogleDisplayVideo360RunReportOperator,
+  GoogleDisplayVideo360DeleteReportOperator,
+  GoogleDisplayVideo360RecordSDFAdvertiserOperator
 )
-from orchestra.google.marketing_platform.sensors.gmp_dv360_sensor import (
-  DisplayVideo360ReportSensor
+from orchestra.google.marketing_platform.sensors.display_video_360 import (
+  GoogleDisplayVideo360ReportSensor
 )
 
 
@@ -78,7 +78,7 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=None)
 
-create_report = DisplayVideo360CreateReportOperator(
+create_report = GoogleDisplayVideo360CreateReportOperator(
     task_id="create_report",
     gcp_conn_id=CONN_ID,
     report=REPORT,
@@ -86,27 +86,27 @@ create_report = DisplayVideo360CreateReportOperator(
     dag=dag)
 query_id = "{{ task_instance.xcom_pull('create_report', key='query_id') }}"
 
-run_report = DisplayVideo360RunReportOperator(
+run_report = GoogleDisplayVideo360RunReportOperator(
     task_id="run_report",
     gcp_conn_id=CONN_ID,
     query_id=query_id,
     dag=dag)
 
-wait_for_report = DisplayVideo360ReportSensor(
+wait_for_report = GoogleDisplayVideo360ReportSensor(
     task_id="wait_for_report",
     gcp_conn_id=CONN_ID,
     query_id=query_id,
     dag=dag)
 report_url = "{{ task_instance.xcom_pull('wait_for_report', key='report_url') }}"
 
-record_advertisers = DisplayVideo360SDFAdvertiserFromReportOperator(
+record_advertisers = GoogleDisplayVideo360RecordSDFAdvertiserOperator(
     task_id='record_advertisers',
     conn_id=CONN_ID,
     report_url=report_url,
     variable_name='dv360_sdf_advertisers',
     dag=dag)
 
-delete_report = DisplayVideo360DeleteReportOperator(
+delete_report = GoogleDisplayVideo360DeleteReportOperator(
     task_id="delete_report",
     gcp_conn_id=CONN_ID,
     query_id=query_id,

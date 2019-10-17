@@ -36,8 +36,8 @@ from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
 from airflow import models
-from orchestra.google.marketing_platform.operators.gmp_dv360_operator import (
-  DisplayVideo360SDFToBqOperator
+from orchestra.google.marketing_platform.operators.display_video_360 import (
+  GoogleDisplayVideo360SDFToBigQueryOperator
 )
 import logging
 import json
@@ -93,7 +93,7 @@ for partner, advertisers in advertisers_per_partner.items():
     if first:
       write_disposition = 'WRITE_TRUNCATE'
       first = False
-    task = DisplayVideo360SDFToBqOperator(
+    task = GoogleDisplayVideo360SDFToBigQueryOperator(
         task_id=task_id,
         gcp_conn_id=conn_id,
         cloud_project_id=cloud_project_id,

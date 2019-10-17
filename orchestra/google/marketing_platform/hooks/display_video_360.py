@@ -27,7 +27,7 @@ from googleapiclient.discovery import build
 logger = logging.getLogger(__name__)
 
 
-class DisplayVideo360Hook(GoogleCloudBaseHook):
+class GoogleDisplayVideo360Hook(GoogleCloudBaseHook):
   """Hook for connecting to the Display & Video 360 API.
   """
 
@@ -44,7 +44,7 @@ class DisplayVideo360Hook(GoogleCloudBaseHook):
       api_name: The name of the DV360 API.
       api_version: The version of the DV360 API.
     """
-    super(DisplayVideo360Hook, self).__init__(
+    super(GoogleDisplayVideo360Hook, self).__init__(
         gcp_conn_id=gcp_conn_id,
         delegate_to=delegate_to)
     self.api_name = api_name

@@ -27,8 +27,8 @@ from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
 
-from orchestra.google.marketing_platform.hooks.gmp_dv360_hook import (
-    DisplayVideo360Hook
+from orchestra.google.marketing_platform.hooks.display_video_360 import (
+    GoogleDisplayVideo360Hook
 )
 from orchestra.google.marketing_platform.operators.gmp_base_operator import (
     GoogleMarketingPlatformBaseOperator
@@ -42,7 +42,7 @@ from orchestra.google.marketing_platform.utils.schema.sdf import (
 logger = logging.getLogger(__name__)
 
 
-class DisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
     """Creates and runs a new Display & Video 360 query.
 
     Attributes:
@@ -66,7 +66,7 @@ class DisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
                  delegate_to=None,
                  *args,
                  **kwargs):
-        super(DisplayVideo360CreateReportOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360CreateReportOperator, self).__init__(*args, **kwargs)
         self.report = report
         self.gcp_conn_id = gcp_conn_id
         self.delegate_to = delegate_to
@@ -74,7 +74,7 @@ class DisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
 
     def execute(self, context):
         if self.hook is None:
-            self.hook = DisplayVideo360Hook(
+            self.hook = GoogleDisplayVideo360Hook(
                 gcp_conn_id=self.gcp_conn_id,
                 delegate_to=self.delegate_to)
 
@@ -85,7 +85,7 @@ class DisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
         context['task_instance'].xcom_push('query_id', response['queryId'])
 
 
-class DisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator):
     """Runs a stored query to generate a report.
 
     Attributes:
@@ -102,7 +102,7 @@ class DisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator):
                  delegate_to=None,
                  *args,
                  **kwargs):
-        super(DisplayVideo360RunReportOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360RunReportOperator, self).__init__(*args, **kwargs)
         self.conn_id = gcp_conn_id
         self.delegate_to = delegate_to
         self.service = None
@@ -110,7 +110,7 @@ class DisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator):
 
     def execute(self, context):
         if self.service is None:
-            hook = DisplayVideo360Hook(
+            hook = GoogleDisplayVideo360Hook(
                 gcp_conn_id=self.conn_id,
                 delegate_to=self.delegate_to
             )
@@ -121,7 +121,7 @@ class DisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator):
         request.execute()
 
 
-class DisplayVideo360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
     """Downloads a Display & Video 360 report into Google Cloud Storage.
 
     Attributes:
@@ -153,7 +153,7 @@ class DisplayVideo360DownloadReportOperator(GoogleMarketingPlatformBaseOperator)
                  delegate_to=None,
                  *args,
                  **kwargs):
-        super(DisplayVideo360DownloadReportOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360DownloadReportOperator, self).__init__(*args, **kwargs)
         self.report_url = report_url
         self.destination_bucket = destination_bucket
         self.destination_object = destination_object
@@ -219,7 +219,7 @@ class DisplayVideo360DownloadReportOperator(GoogleMarketingPlatformBaseOperator)
             os.unlink(temp_file.name)
 
 
-class DisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOperator):
     """Deletes Display & Video 360 queries and any associated reports.
 
     Attributes:
@@ -242,7 +242,7 @@ class DisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOperator):
                  delegate_to=None,
                  *args,
                  **kwargs):
-        super(DisplayVideo360DeleteReportOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360DeleteReportOperator, self).__init__(*args, **kwargs)
         self.query_id = query_id
         self.query_title = query_title
         self.ignore_if_missing = ignore_if_missing
@@ -252,7 +252,7 @@ class DisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOperator):
 
     def execute(self, context):
         if self.hook is None:
-            self.hook = DisplayVideo360Hook(
+            self.hook = GoogleDisplayVideo360Hook(
                 gcp_conn_id=self.gcp_conn_id,
                 delegate_to=self.delegate_to)
 
@@ -267,7 +267,7 @@ class DisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOperator):
                 ignore_if_missing=self.ignore_if_missing)
 
 
-class DisplayVideo360ERFUploadBqOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOperator):
 
     def __init__(self,
                  gcp_conn_id='google_cloud_default',
@@ -285,7 +285,7 @@ class DisplayVideo360ERFUploadBqOperator(GoogleMarketingPlatformBaseOperator):
                  write_disposition='WRITE_TRUNCATE',
                  *args,
                  **kwargs):
-        super(DisplayVideo360ERFUploadBqOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360ERFToBigQueryOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.bq_hook = None
         self.gcs_hook = None
@@ -321,7 +321,7 @@ class DisplayVideo360ERFUploadBqOperator(GoogleMarketingPlatformBaseOperator):
             self.gcs_hook.delete(self.gcs_bucket, filename)
 
 
-class DisplayVideo360MultiERFUploadBQOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360MultiERFToBigQueryOperator(GoogleMarketingPlatformBaseOperator):
     """Upload Multiple Entity Read Files to specified big query dataset.
     """
 
@@ -339,7 +339,7 @@ class DisplayVideo360MultiERFUploadBQOperator(GoogleMarketingPlatformBaseOperato
                  erf_bucket=None,
                  *args,
                  **kwargs):
-        super(DisplayVideo360MultiERFUploadBQOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360MultiERFToBigQueryOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.service = None
         self.bq_hook = None
@@ -379,7 +379,7 @@ class DisplayVideo360MultiERFUploadBQOperator(GoogleMarketingPlatformBaseOperato
             self.gcs_hook.delete(self.gcs_bucket, filename)
 
 
-class DisplayVideo360SDFToBqOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360SDFToBigQueryOperator(GoogleMarketingPlatformBaseOperator):
     """Make a request to SDF API and upload the data to BQ."""
 
     DEFAULT_SDF_TABLE_NAMES = {
@@ -413,7 +413,7 @@ class DisplayVideo360SDFToBqOperator(GoogleMarketingPlatformBaseOperator):
                  sdf_api_response_keys=SDF_API_RESPONSE_KEYS,
                  *args,
                  **kwargs):
-        super(DisplayVideo360SDFToBqOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360SDFToBigQueryOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.service = None
         self.hook = None
@@ -433,7 +433,7 @@ class DisplayVideo360SDFToBqOperator(GoogleMarketingPlatformBaseOperator):
 
     def execute(self, context):
         if self.hook is None:
-            self.hook = DisplayVideo360Hook(gcp_conn_id=self.gcp_conn_id)
+            self.hook = GoogleDisplayVideo360Hook(gcp_conn_id=self.gcp_conn_id)
         if self.bq_hook is None:
             self.bq_hook = BigQueryHook(bigquery_conn_id=self.gcp_conn_id)
         if self.gcs_hook is None:
@@ -483,7 +483,7 @@ class DisplayVideo360SDFToBqOperator(GoogleMarketingPlatformBaseOperator):
                 self.gcs_hook.delete(self.gcs_bucket, filename)
 
 
-class DisplayVideo360SDFAdvertiserFromReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360RecordSDFAdvertiserOperator(GoogleMarketingPlatformBaseOperator):
     """
     Get Partner and Advertiser Ids from a report and populate an airflow variable.
     """
@@ -496,7 +496,7 @@ class DisplayVideo360SDFAdvertiserFromReportOperator(GoogleMarketingPlatformBase
                  gcp_conn_id='google_cloud_default',
                  *args,
                  **kwargs):
-        super(DisplayVideo360SDFAdvertiserFromReportOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360RecordSDFAdvertiserOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.service = None
         self.report_url = report_url
