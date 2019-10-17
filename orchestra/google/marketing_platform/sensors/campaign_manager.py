@@ -20,7 +20,7 @@ import logging
 
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
-from orchestra.google.marketing_platform.hooks.gmp_cm_hook import (
+from orchestra.google.marketing_platform.hooks.campaign_manager import (
   CampaignManagerReportingHook
 )
 

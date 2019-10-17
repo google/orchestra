@@ -25,7 +25,7 @@ import os
 import tempfile
 
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
-from orchestra.google.marketing_platform.hooks.gmp_cm_hook import (
+from orchestra.google.marketing_platform.hooks.campaign_manager import (
   CampaignManagerReportingHook
 )
 from orchestra.google.marketing_platform.operators.gmp_base_operator import (
@@ -37,7 +37,7 @@ from googleapiclient import http
 logger = logging.getLogger(__name__)
 
 
-class CampaignManagerCreateReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleCampaignManagerInsertReportOperator(GoogleMarketingPlatformBaseOperator):
   """Creates and runs a new Display & Video 360 query.
 
   Attributes:
@@ -63,7 +63,7 @@ class CampaignManagerCreateReportOperator(GoogleMarketingPlatformBaseOperator):
       delegate_to=None,
       *args,
       **kwargs):
-    super(CampaignManagerCreateReportOperator, self).__init__(*args, **kwargs)
+    super(GoogleCampaignManagerInsertReportOperator, self).__init__(*args, **kwargs)
     self.report = report
     self.profile_id = profile_id
     self.gcp_conn_id = gcp_conn_id
@@ -102,7 +102,7 @@ class CampaignManagerCreateReportOperator(GoogleMarketingPlatformBaseOperator):
     logger.info(msg)
 
 
-class CampaignManagerDeleteReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleCampaignManagerDeleteReportOperator(GoogleMarketingPlatformBaseOperator):
   """Deletes Campaign Manager reports.
 
   Attributes:
@@ -126,7 +126,7 @@ class CampaignManagerDeleteReportOperator(GoogleMarketingPlatformBaseOperator):
       delegate_to=None,
       *args,
       **kwargs):
-    super(CampaignManagerDeleteReportOperator, self).__init__(*args, **kwargs)
+    super(GoogleCampaignManagerDeleteReportOperator, self).__init__(*args, **kwargs)
     self.report_id = report_id
     self.report_name = report_name
     self.profile_id = profile_id
@@ -150,7 +150,7 @@ class CampaignManagerDeleteReportOperator(GoogleMarketingPlatformBaseOperator):
           self.profile_id, self.report_name, self.ignore_if_missing)
 
 
-class CampaignManagerDownloadReportOperator(
+class GoogleCampaignManagerDownloadReportOperator(
     GoogleMarketingPlatformBaseOperator):
   """Downloads a Campaign Manager report into Google Cloud Storage.
 
@@ -189,7 +189,7 @@ class CampaignManagerDownloadReportOperator(
       delegate_to=None,
       *args,
       **kwargs):
-    super(CampaignManagerDownloadReportOperator, self).__init__(*args, **kwargs)
+    super(GoogleCampaignManagerDownloadReportOperator, self).__init__(*args, **kwargs)
     self.file_id = file_id
     self.report_id = report_id
     self.destination_bucket = destination_bucket
