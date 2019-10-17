@@ -20,11 +20,15 @@ from datetime import datetime
 from datetime import timedelta
 from airflow import DAG
 from airflow import models
-from orchestra.google.gmp.operators.gmp_dv360_operator import DisplayVideo360CreateReportOperator
-from orchestra.google.gmp.operators.gmp_dv360_operator import DisplayVideo360RunReportOperator
-from orchestra.google.gmp.sensors.gmp_dv360_sensor import DisplayVideo360ReportSensor
-from orchestra.google.gmp.operators.gmp_dv360_operator import DisplayVideo360DeleteReportOperator
-from orchestra.google.gmp.operators.gmp_dv360_operator import DisplayVideo360SDFAdvertiserFromReportOperator
+from orchestra.google.marketing_platform.operators.gmp_dv360_operator import (
+  DisplayVideo360CreateReportOperator,
+  DisplayVideo360RunReportOperator,
+  DisplayVideo360DeleteReportOperator,
+  DisplayVideo360SDFAdvertiserFromReportOperator
+)
+from orchestra.google.marketing_platform.sensors.gmp_dv360_sensor import (
+  DisplayVideo360ReportSensor
+)
 
 
 CONN_ID = "gmp_reporting"

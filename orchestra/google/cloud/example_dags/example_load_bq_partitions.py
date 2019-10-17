@@ -19,7 +19,9 @@ Example Airflow DAG showing how to load data into a date-partitioned table.
 
 from airflow import DAG
 from airflow.utils import dates
-from orchestra.google.gcp.operators.gcp_bigquery_operator import BigQueryPartitionLoadOperator
+from orchestra.google.cloud.operators.gcp_bigquery_operator import (
+    BigQueryPartitionLoadOperator
+)
 
 
 DESTINATION_TABLE = "test_bq_dataset.partitioned_results"

@@ -27,11 +27,18 @@ from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
 
-from orchestra.google.gmp.hooks.gmp_dv360_hook import DisplayVideo360Hook
-from orchestra.google.gmp.operators.gmp_base_operator import GoogleMarketingPlatformBaseOperator
-from orchestra.google.gmp.utils import download_and_transform_erf
+from orchestra.google.marketing_platform.hooks.gmp_dv360_hook import (
+    DisplayVideo360Hook
+)
+from orchestra.google.marketing_platform.operators.gmp_base_operator import (
+    GoogleMarketingPlatformBaseOperator
+)
+from orchestra.google.marketing_platform.utils import erf_utils
 
-from orchestra.google.gmp.utils.schema.sdf import SDF_VERSIONED_SCHEMA_TYPES
+from orchestra.google.marketing_platform.utils.schema.sdf import (
+    SDF_VERSIONED_SCHEMA_TYPES
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -300,7 +307,7 @@ class DisplayVideo360ERFUploadBqOperator(GoogleMarketingPlatformBaseOperator):
             self.gcs_hook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.gcp_conn_id)
         if self.bq_hook is None:
             self.bq_hook = BigQueryHook(bigquery_conn_id=self.gcp_conn_id)
-        filename = download_and_transform_erf(self, self.partner_id)
+        filename = erf_utils.download_and_transform_erf(self, self.partner_id)
         entity_read_file_ndj = 'gs://%s/%s' % (self.gcs_bucket, filename)
         try:
             bq_base_cursor = BigQueryBaseCursor(self.bq_hook.get_service(), self.cloud_project_id)
@@ -356,7 +363,7 @@ class DisplayVideo360MultiERFUploadBQOperator(GoogleMarketingPlatformBaseOperato
 
         partner_ids = models.Variable.get('partner_ids').split(',')
         for i, partner_id in enumerate(partner_ids):
-            filename = download_and_transform_erf(self, partner_id)
+            filename = erf_utils.download_and_transform_erf(self, partner_id)
             entity_read_file_ndj = 'gs://%s/%s' % (self.gcs_bucket, filename)
             if i == 0:
                 write_disposition = 'WRITE_TRUNCATE'

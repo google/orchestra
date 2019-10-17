@@ -25,8 +25,12 @@ import os
 import tempfile
 
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
-from orchestra.google.gmp.hooks.gmp_cm_hook import CampaignManagerReportingHook
-from orchestra.google.gmp.operators.gmp_base_operator import GoogleMarketingPlatformBaseOperator
+from orchestra.google.marketing_platform.hooks.gmp_cm_hook import (
+  CampaignManagerReportingHook
+)
+from orchestra.google.marketing_platform.operators.gmp_base_operator import (
+  GoogleMarketingPlatformBaseOperator
+)
 from googleapiclient import http
 
 

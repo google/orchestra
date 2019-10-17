@@ -16,6 +16,8 @@
 #
 ###########################################################################
 
-from orchestra.google.gmp.utils.schema.sdf.v4_2 import SDF_V4_2_SCHEMA_TYPES
+from orchestra.google.marketing_platform.utils.schema.sdf.v4_2 import (
+  SDF_V4_2_SCHEMA_TYPES
+)
 
 SDF_VERSIONED_SCHEMA_TYPES = {'4.2': SDF_V4_2_SCHEMA_TYPES}

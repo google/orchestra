@@ -24,8 +24,12 @@ import json
 import os
 import tempfile
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
-from orchestra.google.gmp.hooks.gmp_sa360_hook import SearchAds360Hook
-from orchestra.google.gmp.operators.gmp_base_operator import GoogleMarketingPlatformBaseOperator
+from orchestra.google.marketing_platform.hooks.gmp_sa360_hook import (
+  SearchAds360Hook
+)
+from orchestra.google.marketing_platform.operators.gmp_base_operator import (
+  GoogleMarketingPlatformBaseOperator
+)
 
 
 class SearchAds360CreateReportOperator(GoogleMarketingPlatformBaseOperator):

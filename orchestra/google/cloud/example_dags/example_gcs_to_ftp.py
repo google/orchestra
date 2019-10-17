@@ -19,7 +19,9 @@ Example Airflow DAG that shows how to FTP a file from Google Cloud Storage.
 
 from airflow import DAG
 from airflow.utils import dates
-from orchestra.google.gcp.operators.gcp_gcs_operator import GoogleCloudStorageToFTPOperator
+from orchestra.google.cloud.operators.gcp_gcs_operator import (
+  GoogleCloudStorageToFTPOperator
+)
 
 
 BUCKET = "test-ftp-bucket"

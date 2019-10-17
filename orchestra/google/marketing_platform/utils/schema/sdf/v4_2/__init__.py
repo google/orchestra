@@ -16,16 +16,19 @@
 #
 ###########################################################################
 
-from orchestra.google.gmp.utils.schema.sdf.v4_2.Ad import SDF_Ad_Schema
-from orchestra.google.gmp.utils.schema.sdf.v4_2.AdGroup import SDF_AdGroup_Schema
-from orchestra.google.gmp.utils.schema.sdf.v4_2.Campaign import SDF_Campaign_Schema
-from orchestra.google.gmp.utils.schema.sdf.v4_2.InsertionOrder import SDF_InsertionOrder_Schema
-from orchestra.google.gmp.utils.schema.sdf.v4_2.LineItem import SDF_LineItem_Schema
+from orchestra.google.marketing_platform.utils.schema.sdf.v4_2 import (
+  Ad,
+  AdGroup,
+  Campaign,
+  InsertionOrder,
+  LineItem
+)
+
 
 SDF_V4_2_SCHEMA_TYPES = {
-    'LINE_ITEM': SDF_LineItem_Schema,
-    'CAMPAIGN': SDF_Campaign_Schema,
-    'AD': SDF_Ad_Schema,
-    'AD_GROUP': SDF_AdGroup_Schema,
-    'INSERTION_ORDER': SDF_InsertionOrder_Schema
+    'LINE_ITEM': LineItem.SDF_LineItem_Schema,
+    'CAMPAIGN': Campaign.SDF_Campaign_Schema,
+    'AD': Ad.SDF_Ad_Schema,
+    'AD_GROUP': AdGroup.SDF_AdGroup_Schema,
+    'INSERTION_ORDER': InsertionOrder.SDF_InsertionOrder_Schema
 }

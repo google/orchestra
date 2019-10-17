@@ -14,26 +14,22 @@
 # limitations under the License.
 #
 
-"""Sensor for detecting the completion of DCM reports.
+"""Sensor for detecting the completion of SA360 reports.
 """
-import logging
-
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
-from orchestra.google.gmp.hooks.gmp_cm_hook import CampaignManagerReportingHook
+from orchestra.google.marketing_platform.hooks.gmp_sa360_hook import (
+  SearchAds360Hook
+)
 
-logger = logging.getLogger(__name__)
 
+class SearchAds360ReportSensor(BaseSensorOperator):
+  """Sensor for detecting the completion of SA360 reports.
 
-class CampaignManagerReportSensor(BaseSensorOperator):
-  """Sensor for detecting the completion of DCM reports.
-
-  Waits for a Campaign Manger report to complete.
+  Waits for a Search Ads 360 report to complete.
 
   Attributes:
     report_id: The ID of the report to poll. (templated)
-    file_id: The ID of the file associated with the report. (templated)
-    profile_id: DCM profile ID used when making API requests. (templated)
     gcp_conn_id: The connection ID to use when fetching connection info.
     delegate_to: The account to impersonate, if any.
     poke_interval: Time, in seconds, that the job should wait in between tries.
@@ -42,12 +38,10 @@ class CampaignManagerReportSensor(BaseSensorOperator):
         criteria is not met.
   """
 
-  template_fields = ['report_id', 'file_id', 'profile_id']
+  template_fields = ['report_id']
 
   def __init__(self,
       report_id,
-      file_id,
-      profile_id,
       gcp_conn_id='google_cloud_default',
       delegate_to=None,
       poke_interval=60 * 5,
@@ -55,34 +49,27 @@ class CampaignManagerReportSensor(BaseSensorOperator):
       mode='reschedule',
       *args,
       **kwargs):
-    super(CampaignManagerReportSensor, self).__init__(
+    super(SearchAds360ReportSensor, self).__init__(
         poke_interval=poke_interval,
         timeout=timeout,
         mode=mode,
         *args,
         **kwargs)
     self.gcp_conn_id = gcp_conn_id
-    self.profile_id = profile_id
-    self.file_id = file_id
     self.report_id = report_id
     self.delegate_to = delegate_to
     self.hook = None
 
   def poke(self, context):
     if self.hook is None:
-      self.hook = CampaignManagerReportingHook(
+      self.hook = SearchAds360Hook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
-    logger.info(self.gcp_conn_id)
-    logger.info(self.report_id)
-    logger.info(self.file_id)
-    request = self.hook.get_service().reports().files().get(
-        profileId=self.profile_id,
-        reportId=self.report_id,
-        fileId=self.file_id)
+
+    request = self.hook.get_service().reports().get(reportId=self.report_id)
     response = request.execute()
-    logger.info(response)
+
     if response:
-      if response['status'] != 'PROCESSING':
-        return True
+      return response.get('isReportReady', False)
+
     return False

@@ -19,7 +19,9 @@ Example Airflow DAG that shows how to use the Google Sheets operator.
 
 from airflow import DAG
 from airflow.utils import dates
-from orchestra.google.gsuite.operators.gsuite_sheets_operator import GoogleSheetsToCloudStorageOperator
+from orchestra.google.gsuite.operators.gsuite_sheets_operator import (
+    GoogleSheetsToCloudStorageOperator
+)
 
 
 SPREADSHEET = "17wvu_uvdMqYuOt5p25_EICVgEjWqgYvKEeproIgjAZs"
