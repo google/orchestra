@@ -21,13 +21,13 @@ import logging
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
 from orchestra.google.marketing_platform.hooks.campaign_manager import (
-  CampaignManagerReportingHook
+  GoogleCampaignManagerReportingHook
 )
 
 logger = logging.getLogger(__name__)
 
 
-class CampaignManagerReportSensor(BaseSensorOperator):
+class GoogleCampaignManagerReportSensor(BaseSensorOperator):
   """Sensor for detecting the completion of DCM reports.
 
   Waits for a Campaign Manger report to complete.
@@ -57,7 +57,7 @@ class CampaignManagerReportSensor(BaseSensorOperator):
       mode='reschedule',
       *args,
       **kwargs):
-    super(CampaignManagerReportSensor, self).__init__(
+    super(GoogleCampaignManagerReportSensor, self).__init__(
         poke_interval=poke_interval,
         timeout=timeout,
         mode=mode,
@@ -72,7 +72,7 @@ class CampaignManagerReportSensor(BaseSensorOperator):
 
   def poke(self, context):
     if self.hook is None:
-      self.hook = CampaignManagerReportingHook(
+      self.hook = GoogleCampaignManagerReportingHook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
     logger.info(self.gcp_conn_id)

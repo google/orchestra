@@ -24,7 +24,7 @@ from airflow.contrib.hooks.gcp_api_base_hook import GoogleCloudBaseHook
 from googleapiclient.discovery import build
 
 
-class CampaignManagerReportingHook(GoogleCloudBaseHook):
+class GoogleCampaignManagerReportingHook(GoogleCloudBaseHook):
   """Hook for connecting to the Doubleclick Campaign Manager DFA Reporting API.
   """
 
@@ -41,7 +41,7 @@ class CampaignManagerReportingHook(GoogleCloudBaseHook):
       api_name: The name of the DCM API.
       api_version: The version of the DCM API.
     """
-    super(CampaignManagerReportingHook, self).__init__(
+    super(GoogleCampaignManagerReportingHook, self).__init__(
         gcp_conn_id=gcp_conn_id,
         delegate_to=delegate_to)
     self.api_name = api_name

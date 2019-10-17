@@ -26,7 +26,7 @@ import tempfile
 
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from orchestra.google.marketing_platform.hooks.campaign_manager import (
-  CampaignManagerReportingHook
+  GoogleCampaignManagerReportingHook
 )
 from orchestra.google.marketing_platform.operators.gmp_base_operator import (
   GoogleMarketingPlatformBaseOperator
@@ -87,7 +87,7 @@ class GoogleCampaignManagerInsertReportOperator(GoogleMarketingPlatformBaseOpera
 
   def execute(self, context):
     if self.hook is None:
-      self.hook = CampaignManagerReportingHook(
+      self.hook = GoogleCampaignManagerReportingHook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
 
@@ -137,7 +137,7 @@ class GoogleCampaignManagerDeleteReportOperator(GoogleMarketingPlatformBaseOpera
 
   def execute(self, context):
     if self.hook is None:
-      self.hook = CampaignManagerReportingHook(
+      self.hook = GoogleCampaignManagerReportingHook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
 
@@ -242,7 +242,7 @@ class GoogleCampaignManagerDownloadReportOperator(
           google_cloud_storage_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
     if self.cm_hook is None:
-      self.cm_hook = CampaignManagerReportingHook(
+      self.cm_hook = GoogleCampaignManagerReportingHook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
 
