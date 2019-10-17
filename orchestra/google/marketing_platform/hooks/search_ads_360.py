@@ -26,7 +26,7 @@ from googleapiclient.discovery import build
 logger = logging.getLogger(__name__)
 
 
-class SearchAds360Hook(GoogleCloudBaseHook):
+class GoogleSearchAds360Hook(GoogleCloudBaseHook):
   """Airflow Hook to connect to Search Ads 360 API.
   """
 
@@ -44,7 +44,7 @@ class SearchAds360Hook(GoogleCloudBaseHook):
       api_name: The name of the SA360 API.
       api_version: The version of the SA360 API.
     """
-    super(SearchAds360Hook, self).__init__(
+    super(GoogleSearchAds360Hook, self).__init__(
         gcp_conn_id=gcp_conn_id,
         delegate_to=delegate_to)
     self.api_name = api_name

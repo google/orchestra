@@ -24,15 +24,15 @@ import json
 import os
 import tempfile
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
-from orchestra.google.marketing_platform.hooks.gmp_sa360_hook import (
-  SearchAds360Hook
+from orchestra.google.marketing_platform.hooks.search_ads_360 import (
+  GoogleSearchAds360Hook
 )
 from orchestra.google.marketing_platform.operators.gmp_base_operator import (
   GoogleMarketingPlatformBaseOperator
 )
 
 
-class SearchAds360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleSearchAds360InsertReportOperator(GoogleMarketingPlatformBaseOperator):
   """Creates and runs a new Search Ads 360 report.
 
   Attributes:
@@ -56,7 +56,7 @@ class SearchAds360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
       delegate_to=None,
       *args,
       **kwargs):
-    super(SearchAds360CreateReportOperator, self).__init__(*args, **kwargs)
+    super(GoogleSearchAds360InsertReportOperator, self).__init__(*args, **kwargs)
     self.report = report
     self.gcp_conn_id = gcp_conn_id
     self.delegate_to = delegate_to
@@ -64,7 +64,7 @@ class SearchAds360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
 
   def execute(self, context):
     if self.hook is None:
-      self.hook = SearchAds360Hook(
+      self.hook = GoogleSearchAds360Hook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
 
@@ -75,7 +75,7 @@ class SearchAds360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
     context['task_instance'].xcom_push('report_id', response['id'])
 
 
-class SearchAds360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleSearchAds360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
   """Downloads a Search Ads 360 report into Google Cloud Storage.
 
   Attributes:
@@ -105,7 +105,7 @@ class SearchAds360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
       delegate_to=None,
       *args,
       **kwargs):
-    super(SearchAds360DownloadReportOperator, self).__init__(*args, **kwargs)
+    super(GoogleSearchAds360DownloadReportOperator, self).__init__(*args, **kwargs)
     self.report_id = report_id
     self.destination_bucket = destination_bucket
     self.destination_object = destination_object
@@ -140,7 +140,7 @@ class SearchAds360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
 
   def execute(self, context):
     if self.sa360_hook is None:
-      self.sa360_hook = SearchAds360Hook(
+      self.sa360_hook = GoogleSearchAds360Hook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
     if self.gcs_hook is None:

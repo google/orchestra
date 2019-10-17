@@ -18,12 +18,12 @@
 """
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
-from orchestra.google.marketing_platform.hooks.gmp_sa360_hook import (
-  SearchAds360Hook
+from orchestra.google.marketing_platform.hooks.search_ads_360 import (
+  GoogleSearchAds360Hook
 )
 
 
-class SearchAds360ReportSensor(BaseSensorOperator):
+class GoogleSearchAds360ReportSensor(BaseSensorOperator):
   """Sensor for detecting the completion of SA360 reports.
 
   Waits for a Search Ads 360 report to complete.
@@ -49,7 +49,7 @@ class SearchAds360ReportSensor(BaseSensorOperator):
       mode='reschedule',
       *args,
       **kwargs):
-    super(SearchAds360ReportSensor, self).__init__(
+    super(GoogleSearchAds360ReportSensor, self).__init__(
         poke_interval=poke_interval,
         timeout=timeout,
         mode=mode,
@@ -62,7 +62,7 @@ class SearchAds360ReportSensor(BaseSensorOperator):
 
   def poke(self, context):
     if self.hook is None:
-      self.hook = SearchAds360Hook(
+      self.hook = GoogleSearchAds360Hook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
 
