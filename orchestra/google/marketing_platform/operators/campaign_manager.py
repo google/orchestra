@@ -28,7 +28,7 @@ from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from orchestra.google.marketing_platform.hooks.campaign_manager import (
   GoogleCampaignManagerReportingHook
 )
-from orchestra.google.marketing_platform.operators.gmp_base_operator import (
+from orchestra.google.marketing_platform.operators.marketing_platform import (
   GoogleMarketingPlatformBaseOperator
 )
 from googleapiclient import http

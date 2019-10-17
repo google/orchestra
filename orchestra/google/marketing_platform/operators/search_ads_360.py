@@ -27,7 +27,7 @@ from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from orchestra.google.marketing_platform.hooks.search_ads_360 import (
   GoogleSearchAds360Hook
 )
-from orchestra.google.marketing_platform.operators.gmp_base_operator import (
+from orchestra.google.marketing_platform.operators.marketing_platform import (
   GoogleMarketingPlatformBaseOperator
 )
 

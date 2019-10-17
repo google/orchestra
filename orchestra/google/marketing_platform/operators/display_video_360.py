@@ -30,7 +30,7 @@ from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
 from orchestra.google.marketing_platform.hooks.display_video_360 import (
     GoogleDisplayVideo360Hook
 )
-from orchestra.google.marketing_platform.operators.gmp_base_operator import (
+from orchestra.google.marketing_platform.operators.marketing_platform import (
     GoogleMarketingPlatformBaseOperator
 )
 from orchestra.google.marketing_platform.utils import erf_utils
