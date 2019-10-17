@@ -268,66 +268,11 @@ class GoogleDisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOpera
 
 
 class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOperator):
-
-    def __init__(self,
-                 gcp_conn_id='google_cloud_default',
-                 profile_id=-1,
-                 report_body=None,
-                 yesterday=False,
-                 entity_type=None,
-                 file_creation_date=None,
-                 cloud_project_id=None,
-                 bq_table=None,
-                 schema=None,
-                 gcs_bucket=None,
-                 erf_bucket=None,
-                 partner_id=None,
-                 write_disposition='WRITE_TRUNCATE',
-                 *args,
-                 **kwargs):
-        super(GoogleDisplayVideo360ERFToBigQueryOperator, self).__init__(*args, **kwargs)
-        self.gcp_conn_id = gcp_conn_id
-        self.bq_hook = None
-        self.gcs_hook = None
-        self.report_body = report_body
-        self.erf_bucket = erf_bucket
-        self.yesterday = yesterday
-        self.cloud_project_id = cloud_project_id
-        self.bq_table = bq_table
-        self.gcs_bucket = gcs_bucket
-        self.schema = schema
-        self.entity_type = entity_type
-        self.erf_object = 'entity/%s.0.%s.json' % (file_creation_date, entity_type)
-        self.file_creation_date = file_creation_date
-        self.partner_id = partner_id
-        self.write_disposition = write_disposition
-
-    def execute(self, context):
-        if self.gcs_hook is None:
-            self.gcs_hook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.gcp_conn_id)
-        if self.bq_hook is None:
-            self.bq_hook = BigQueryHook(bigquery_conn_id=self.gcp_conn_id)
-        filename = erf_utils.download_and_transform_erf(self, self.partner_id)
-        entity_read_file_ndj = 'gs://%s/%s' % (self.gcs_bucket, filename)
-        try:
-            bq_base_cursor = BigQueryBaseCursor(self.bq_hook.get_service(), self.cloud_project_id)
-            bq_base_cursor.run_load(
-                destination_project_dataset_table=self.bq_table,
-                schema_fields=self.schema,
-                source_uris=[entity_read_file_ndj],
-                source_format='NEWLINE_DELIMITED_JSON',
-                write_disposition=self.write_disposition)
-        finally:
-            self.gcs_hook.delete(self.gcs_bucket, filename)
-
-
-class GoogleDisplayVideo360MultiERFToBigQueryOperator(GoogleMarketingPlatformBaseOperator):
     """Upload Multiple Entity Read Files to specified big query dataset.
     """
 
     def __init__(self,
                  gcp_conn_id='google_cloud_default',
-                 profile_id=-1,
                  report_body=None,
                  yesterday=False,
                  entity_type=None,
@@ -337,9 +282,11 @@ class GoogleDisplayVideo360MultiERFToBigQueryOperator(GoogleMarketingPlatformBas
                  schema=None,
                  gcs_bucket=None,
                  erf_bucket=None,
+                 partner_ids=[],
+                 write_disposition='WRITE_TRUNCATE',
                  *args,
                  **kwargs):
-        super(GoogleDisplayVideo360MultiERFToBigQueryOperator, self).__init__(*args, **kwargs)
+        super(GoogleDisplayVideo360ERFToBigQueryOperator, self).__init__(*args, **kwargs)
         self.gcp_conn_id = gcp_conn_id
         self.service = None
         self.bq_hook = None
@@ -353,29 +300,29 @@ class GoogleDisplayVideo360MultiERFToBigQueryOperator(GoogleMarketingPlatformBas
         self.schema = schema
         self.entity_type = entity_type
         self.erf_object = 'entity/%s.0.%s.json' % (file_creation_date, entity_type)
+        self.partner_ids = partner_ids
+        self.write_disposition = write_disposition
         self.file_creation_date = file_creation_date
 
     def execute(self, context):
         if self.gcs_hook:
-            self.gcs_hook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.gcp_conn_id)
+            self.gcs_hook = GoogleCloudStorageHook(
+                google_cloud_storage_conn_id=self.gcp_conn_id)
         if self.bq_hook:
             self.bq_hook = BigQueryHook(bigquery_conn_id=self.gcp_conn_id)
 
-        partner_ids = models.Variable.get('partner_ids').split(',')
-        for i, partner_id in enumerate(partner_ids):
+        for i, partner_id in enumerate(self.partner_ids):
             filename = erf_utils.download_and_transform_erf(self, partner_id)
             entity_read_file_ndj = 'gs://%s/%s' % (self.gcs_bucket, filename)
-            if i == 0:
-                write_disposition = 'WRITE_TRUNCATE'
-            else:
-                write_disposition = 'WRITE_APPEND'
+            if i > 0:
+                self.write_disposition = 'WRITE_APPEND'
 
             bq_base_cursor = BigQueryBaseCursor(self.bq_hook.get_service(), self.cloud_project_id)
             bq_base_cursor.run_load(
                 self.bq_table,
                 self.schema, [entity_read_file_ndj],
                 source_format='NEWLINE_DELIMITED_JSON',
-                write_disposition=write_disposition)
+                write_disposition=self.write_disposition)
             self.gcs_hook.delete(self.gcs_bucket, filename)
 
 

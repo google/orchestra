@@ -26,7 +26,7 @@ from orchestra.google.marketing_platform.utils.schema.erf import (
   Entity_Schema_Lookup
 )
 from orchestra.google.marketing_platform.operators.display_video_360 import (
-  GoogleDisplayVideo360MultiERFToBigQueryOperator
+  GoogleDisplayVideo360ERFToBigQueryOperator
 )
 
 
@@ -61,12 +61,13 @@ dag = DAG(
     default_args=default_args,
     schedule_interval=timedelta(1))
 
+partner_ids = models.Variable.get('partner_ids').split(',')
 for entity_type in private_entity_types:
     schema = Entity_Schema_Lookup[entity_type]
     local_bq_table = '%s.%s' % (bq_dataset, entity_type)
 
     task_id = 'multi_%s_to_bq' % entity_type
-    multi = GoogleDisplayVideo360MultiERFToBigQueryOperator(
+    multi = GoogleDisplayVideo360ERFToBigQueryOperator(
       gcp_conn_id=conn_id,
       task_id=task_id,
       entity_type=entity_type,
@@ -76,4 +77,5 @@ for entity_type in private_entity_types:
       gcs_bucket=gcs_bucket,
       cloud_project_id=cloud_project_id,
       schema=schema,
+      partner_ids=partner_ids,
       dag=dag)

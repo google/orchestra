@@ -26,7 +26,7 @@ from orchestra.google.marketing_platform.utils.schema.erf import (
     Entity_Schema_Lookup
 )
 from orchestra.google.marketing_platform.operators.display_video_360 import (
-  GoogleDisplayVideo360ERFToBigQueryOperator
+    GoogleDisplayVideo360ERFToBigQueryOperator
 )
 
 
@@ -58,7 +58,7 @@ def create_tasks(target_dag, creation_date, bucket, dataset, gcp_id, gcp_conn_id
                 gcs_bucket=bucket,
                 cloud_project_id=gcp_id,
                 schema=schema,
-                partner_id=partner_id,
+                partner_ids=[partner_id],
                 write_disposition=write_disposition,
                 trigger_rule='all_done',
                 dag=target_dag)
