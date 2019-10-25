@@ -305,10 +305,10 @@ class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOper
         self.file_creation_date = file_creation_date
 
     def execute(self, context):
-        if self.gcs_hook:
+        if self.gcs_hook is None:
             self.gcs_hook = GoogleCloudStorageHook(
                 google_cloud_storage_conn_id=self.gcp_conn_id)
-        if self.bq_hook:
+        if self.bq_hook is None:
             self.bq_hook = BigQueryHook(bigquery_conn_id=self.gcp_conn_id)
 
         for i, partner_id in enumerate(self.partner_ids):
@@ -317,7 +317,7 @@ class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOper
             if i > 0:
                 self.write_disposition = 'WRITE_APPEND'
 
-            bq_base_cursor = BigQueryBaseCursor(self.bq_hook.get_service(), self.cloud_project_id)
+            bq_base_cursor = self.bq_hook.get_conn().cursor()
             bq_base_cursor.run_load(
                 self.bq_table,
                 self.schema, [entity_read_file_ndj],
@@ -416,7 +416,7 @@ class GoogleDisplayVideo360SDFToBigQueryOperator(GoogleMarketingPlatformBaseOper
             bq_table = '%s.%s' % (self.bq_dataset, bq_table)
             schema = SDF_VERSIONED_SCHEMA_TYPES.get(self.api_version).get(file_type)
             try:
-                bq_base_cursor = BigQueryBaseCursor(self.bq_hook.get_service(), self.cloud_project_id)
+                bq_base_cursor = self.bq_hook.get_conn().cursor()
                 logger.info('Uploading SDF to BigQuery')
                 bq_base_cursor.run_load(
                     destination_project_dataset_table=bq_table,
