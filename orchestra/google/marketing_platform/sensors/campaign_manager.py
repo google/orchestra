@@ -21,7 +21,7 @@ import logging
 
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
 from orchestra.google.marketing_platform.hooks.campaign_manager import (
-  GoogleCampaignManagerReportingHook
+  GoogleCampaignManagerHook
 )
 
 logger = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ class GoogleCampaignManagerReportSensor(BaseSensorOperator):
 
   def poke(self, context):
     if self.hook is None:
-      self.hook = GoogleCampaignManagerReportingHook(
+      self.hook = GoogleCampaignManagerHook(
           gcp_conn_id=self.gcp_conn_id,
           delegate_to=self.delegate_to)
     logger.info(self.gcp_conn_id)
