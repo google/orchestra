@@ -10,20 +10,10 @@
     - [Setting up a service account](#setting-up-a-service-account)
     - [Default Service Account](#default-service-account)
     - [Creating a new user for your service account in DV360](#creating-a-new-user-for-your-service-account-in-dv360)
-    - [DV360 Entity Read File Authorization](#dv360-entity-read-file-authorization)
     - [Multiple Partners](#multiple-partners)
 - [Configuring Orchestra](#configuring-orchestra)
     - [Variables](#variables)
     - [Adding Workflows](#adding-workflows)
-- [GMP Reporting](#gmp-reporting)
-    - [Create the Airflow Connection to GMP reporting](#create-the-airflow-connection-to-gmp-reporting)
-    - [Creating a DV360 report](#creating-a-dv360-report)
-    - [More DV360 Operators](#more-dv360-operators)
-- [Structured Data Files](#structured-data-files)
-    - [Create a new Airflow Connection or update an existing one](#create-a-new-airflow-connection-or-update-an-existing-one)
-    - [Create an SDF advertisers report](#create-an-sdf-advertisers-report)
-    - [Run the SDF advertisers report](#run-the-sdf-advertisers-report)
-    - [Upload SDFs to BigQuery](#upload-sdfs-to-bigquery)
 - [Additional info](#additional-info)
     - [Deleting an environment](#deleting-an-environment)
 
@@ -34,13 +24,14 @@ It is recommended that you install this solution through the Google Cloud Platfo
 
 We recommend familiarising yourself with Composer [here](https://cloud.google.com/composer/docs/).
 
-**_Orchestra_** is an open source project, built on top of Composer, for managing common Display and Video 360 ETL tasks such as downloading Entity Read Files and uploading them to BigQuery.
+**_Orchestra_** is an open source project, built on top of Composer, that is custom operators for Airflow designed to solve the needs of Advertisers.
 
-It is available on [github](https://github.com/google/orchestra).
+Orchestra lets Enterprise Clients build their Advertising Data Lake out of the box and customize it to their needs
 
-Below we will explain how to set up an environment for Composer, which files to use from Orchestra and how to grant access to your DV360 account to your Cloud Project.
+Orchestra lets sophisticated clients automate workflows at scale for huge efficiency gains.
 
-This will create a fully managed workflow that - in our example - will import your required Entity Read Files to BigQuery.
+Orchestra is a fully open sourced Solution Toolkit for building enterprise data solutions on Airflow.
+
 
 
 # Setting up your Orchestra environment in GCP
@@ -65,7 +56,6 @@ In you GCP Project menu (or directly through [this link](https://console.cloud.g
 ### Create a Composer environment
 [Follow these steps to create a Composer environment](https://cloud.google.com/composer/docs/how-to/managing/creating) in Google Cloud Platform - please note that it can take up to 20/30 minutes.
 
-For your installation you **must** set your Python version to 2, and we are assuming you are using the default service account.
 
 Environment Variables, Tags and Configuration Properties (airflow.cfg) can all be left as standard and you can use the default values for number of nodes, machine types and disk size (you can use a smaller disk size if you want to save some costs).
 
