@@ -26,19 +26,11 @@ We recommend familiarising yourself with Composer [here](https://cloud.google.co
 
 **_Orchestra_** is an open source project, built on top of Composer, that is custom operators for Airflow designed to solve the needs of Advertisers.
 
-<<<<<<< HEAD
 Orchestra lets Enterprise Clients build their Advertising Data Lake out of the box and customize it to their needs
 
 Orchestra lets sophisticated clients automate workflows at scale for huge efficiency gains.
 
 Orchestra is a fully open sourced Solution Toolkit for building enterprise data solutions on Airflow.
-=======
-Orchestra let’s Enterprise Clients build their Advertising Data Lake out of the box and customize it to their needs
-
-Orchestra let’s sophisticated clients automate workflows at scale for huge efficiency gains.
-
-Orchestra is a fully open sourced Solution Toolkit for building enterprise data solutions on Google Cloud Platform
->>>>>>> Update readme
 
 
 
