@@ -319,8 +319,9 @@ class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOper
 
             bq_base_cursor = self.bq_hook.get_conn().cursor()
             bq_base_cursor.run_load(
-                self.bq_table,
-                self.schema, [entity_read_file_ndj],
+                destination_project_dataset_table=self.bq_table,
+                schema_fields=self.schema,
+                source_uris=[entity_read_file_ndj],
                 source_format='NEWLINE_DELIMITED_JSON',
                 write_disposition=self.write_disposition)
             self.gcs_hook.delete(self.gcs_bucket, filename)
