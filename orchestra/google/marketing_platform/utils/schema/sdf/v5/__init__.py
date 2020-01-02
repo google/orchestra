@@ -1,6 +1,6 @@
 ###########################################################################
 #
-#  Copyright 2019 Google Inc.
+#  Copyright 2020 Google Inc.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -16,11 +16,19 @@
 #
 ###########################################################################
 
-from orchestra.google.marketing_platform.utils.schema.sdf.v4_2 import (
-  SDF_V4_2_SCHEMA_TYPES
-)
 from orchestra.google.marketing_platform.utils.schema.sdf.v5 import (
-  SDF_V5_SCHEMA_TYPES
+  Ad,
+  AdGroup,
+  Campaign,
+  InsertionOrder,
+  LineItem
 )
 
-SDF_VERSIONED_SCHEMA_TYPES = {'4.2':SDF_V4_2_SCHEMA_TYPES,'5':SDF_V5_SCHEMA_TYPES}
+
+SDF_V5_SCHEMA_TYPES = {
+    'LINE_ITEM': LineItem.SDF_LineItem_Schema,
+    'CAMPAIGN': Campaign.SDF_Campaign_Schema,
+    'AD': Ad.SDF_Ad_Schema,
+    'AD_GROUP': AdGroup.SDF_AdGroup_Schema,
+    'INSERTION_ORDER': InsertionOrder.SDF_InsertionOrder_Schema
+}
