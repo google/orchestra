@@ -330,7 +330,6 @@ class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOper
                 self.write_disposition = 'WRITE_APPEND'
 
             bq_base_cursor = self.bq_hook.get_conn().cursor()
-
             bq_base_cursor.run_load(
                 destination_project_dataset_table=self.bq_table,
                 schema_fields=self.schema,
