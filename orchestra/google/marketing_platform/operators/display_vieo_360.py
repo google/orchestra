@@ -50,6 +50,7 @@ class GoogleDisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOpera
           Can receive a json string representing the report or reference to a
           template file. Template references are recognized by a string ending in
           '.json'.
+      api_version: The DV360 API version.
       gcp_conn_id: The connection ID to use when fetching connection info.
       delegate_to: The account to impersonate, if any.
 
@@ -62,12 +63,14 @@ class GoogleDisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOpera
 
     def __init__(self,
                  report,
+                 api_version='v1',
                  gcp_conn_id='google_cloud_default',
                  delegate_to=None,
                  *args,
                  **kwargs):
         super(GoogleDisplayVideo360CreateReportOperator, self).__init__(*args, **kwargs)
         self.report = report
+        self.api_version = api_version
         self.gcp_conn_id = gcp_conn_id
         self.delegate_to = delegate_to
         self.hook = None
@@ -75,6 +78,7 @@ class GoogleDisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOpera
     def execute(self, context):
         if self.hook is None:
             self.hook = GoogleDisplayVideo360Hook(
+                api_version=self.api_version,
                 gcp_conn_id=self.gcp_conn_id,
                 delegate_to=self.delegate_to)
 
@@ -89,6 +93,7 @@ class GoogleDisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator
     """Runs a stored query to generate a report.
 
     Attributes:
+      api_version: The DV360 API version.
       query_id: The ID of the query to run. (templated)
       gcp_conn_id: The connection ID to use when fetching connection info.
       delegate_to: The account to impersonate, if any.
@@ -98,11 +103,13 @@ class GoogleDisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator
 
     def __init__(self,
                  query_id,
+                 api_version='v1',
                  gcp_conn_id='google_cloud_default',
                  delegate_to=None,
                  *args,
                  **kwargs):
         super(GoogleDisplayVideo360RunReportOperator, self).__init__(*args, **kwargs)
+        self.api_version = api_version
         self.conn_id = gcp_conn_id
         self.delegate_to = delegate_to
         self.service = None
@@ -111,6 +118,7 @@ class GoogleDisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator
     def execute(self, context):
         if self.service is None:
             hook = GoogleDisplayVideo360Hook(
+                api_version=self.api_version,
                 gcp_conn_id=self.conn_id,
                 delegate_to=self.delegate_to
             )
@@ -223,6 +231,7 @@ class GoogleDisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOpera
     """Deletes Display & Video 360 queries and any associated reports.
 
     Attributes:
+      api_version: The DV360 API version.
       query_id: The DV360 query id to delete. (templated)
       query_title: The DV360 query title to delete. (templated)
           Any query with a matching title will be deleted.
@@ -235,6 +244,7 @@ class GoogleDisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOpera
     ui_color = '#ffd1dc'
 
     def __init__(self,
+                 api_version='v1',
                  query_id=None,
                  query_title=None,
                  ignore_if_missing=False,
@@ -243,6 +253,7 @@ class GoogleDisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOpera
                  *args,
                  **kwargs):
         super(GoogleDisplayVideo360DeleteReportOperator, self).__init__(*args, **kwargs)
+        self.api_version = api_version
         self.query_id = query_id
         self.query_title = query_title
         self.ignore_if_missing = ignore_if_missing
@@ -254,6 +265,7 @@ class GoogleDisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOpera
         if self.hook is None:
             self.hook = GoogleDisplayVideo360Hook(
                 gcp_conn_id=self.gcp_conn_id,
+                api_version=self.api_version,
                 delegate_to=self.delegate_to)
 
         if self.query_id is not None:
@@ -318,6 +330,7 @@ class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOper
                 self.write_disposition = 'WRITE_APPEND'
 
             bq_base_cursor = self.bq_hook.get_conn().cursor()
+
             bq_base_cursor.run_load(
                 destination_project_dataset_table=self.bq_table,
                 schema_fields=self.schema,
