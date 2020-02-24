@@ -24,12 +24,6 @@ class GoogleMarketingPlatformBaseOperator(BaseOperator):
   """Base class for all Google Marketing Platform operators.
   """
 
-  def render_template(self, attr, content, context):
-    result = super(GoogleMarketingPlatformBaseOperator, self).render_template(
-        attr, content, context)
-
-    # Allow rendered params to be used when rendering other templates.
-    if attr == 'params':
-      context['params'] = result
-
-    return result
+  def render_template(self, content, context, jinja_env=None, seen_oids=None):
+    return super(GoogleMarketingPlatformBaseOperator, self).render_template(
+        content, context, jinja_env, seen_oids)
