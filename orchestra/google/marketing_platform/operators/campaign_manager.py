@@ -25,11 +25,10 @@ import os
 import tempfile
 
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
+from airflow.models import BaseOperator
+
 from orchestra.google.marketing_platform.hooks.campaign_manager import (
   GoogleCampaignManagerHook
-)
-from orchestra.google.marketing_platform.operators.marketing_platform import (
-  GoogleMarketingPlatformBaseOperator
 )
 from googleapiclient import http
 
@@ -37,7 +36,7 @@ from googleapiclient import http
 logger = logging.getLogger(__name__)
 
 
-class GoogleCampaignManagerInsertReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleCampaignManagerInsertReportOperator(BaseOperator):
   """Creates and runs a new Display & Video 360 query.
 
   Attributes:
@@ -102,7 +101,7 @@ class GoogleCampaignManagerInsertReportOperator(GoogleMarketingPlatformBaseOpera
     logger.info(msg)
 
 
-class GoogleCampaignManagerDeleteReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleCampaignManagerDeleteReportOperator(BaseOperator):
   """Deletes Campaign Manager reports.
 
   Attributes:
@@ -150,8 +149,7 @@ class GoogleCampaignManagerDeleteReportOperator(GoogleMarketingPlatformBaseOpera
           self.profile_id, self.report_name, self.ignore_if_missing)
 
 
-class GoogleCampaignManagerDownloadReportOperator(
-    GoogleMarketingPlatformBaseOperator):
+class GoogleCampaignManagerDownloadReportOperator(BaseOperator):
   """Downloads a Campaign Manager report into Google Cloud Storage.
 
   Attributes:

@@ -24,15 +24,13 @@ import json
 import os
 import tempfile
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
+from airflow.models import BaseOperator
 from orchestra.google.marketing_platform.hooks.search_ads_360 import (
   GoogleSearchAds360Hook
 )
-from orchestra.google.marketing_platform.operators.marketing_platform import (
-  GoogleMarketingPlatformBaseOperator
-)
 
 
-class GoogleSearchAds360InsertReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleSearchAds360InsertReportOperator(BaseOperator):
   """Creates and runs a new Search Ads 360 report.
 
   Attributes:
@@ -75,7 +73,7 @@ class GoogleSearchAds360InsertReportOperator(GoogleMarketingPlatformBaseOperator
     context['task_instance'].xcom_push('report_id', response['id'])
 
 
-class GoogleSearchAds360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleSearchAds360DownloadReportOperator(BaseOperator):
   """Downloads a Search Ads 360 report into Google Cloud Storage.
 
   Attributes:

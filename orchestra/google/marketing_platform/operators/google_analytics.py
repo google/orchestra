@@ -23,13 +23,13 @@ import logging
 import os
 import tempfile
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
+from airflow.models import BaseOperator
 from orchestra.google.marketing_platform.hooks.google_analytics import GoogleAnalyticsManagementHook
-from orchestra.google.marketing_platform.operators.marketing_platform import GoogleMarketingPlatformBaseOperator
 
 logger = logging.getLogger(__name__)
 
 
-class GoogleAnalyticsDataImportUploadOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleAnalyticsDataImportUploadOperator(BaseOperator):
     """Take a file from Cloud Storage and uploads it to GA via data import API.
 
     :param storage_bucket: The Google cloud storage bucket where the file is stored
@@ -126,7 +126,7 @@ class GoogleAnalyticsDataImportUploadOperator(GoogleMarketingPlatformBaseOperato
             os.unlink(temp_ga_upload_file.name)
 
 
-class GoogleAnalyticsDeletePreviousDataUploadsOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleAnalyticsDeletePreviousDataUploadsOperator(BaseOperator):
     """Deletes previous GA uploads to leave the latest file to control the size
     of the Data Set Quota
 
@@ -194,7 +194,7 @@ class GoogleAnalyticsDeletePreviousDataUploadsOperator(GoogleMarketingPlatformBa
                                         delete_request_body)
 
 
-class GoogleAnalyticsModifyFileHeadersDataImportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleAnalyticsModifyFileHeadersDataImportOperator(BaseOperator):
     """GA has a very particular naming convention for Data Import. Ability to
     prefix "ga:" to all column headers and also a dict to rename columns to
     match the custom dimension ID in GA i.e clientId : dimensionX.

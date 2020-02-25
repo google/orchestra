@@ -26,12 +26,10 @@ from airflow import models
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
+from airflow.models import BaseOperator
 
 from orchestra.google.marketing_platform.hooks.display_video_360 import (
     GoogleDisplayVideo360Hook
-)
-from orchestra.google.marketing_platform.operators.marketing_platform import (
-    GoogleMarketingPlatformBaseOperator
 )
 from orchestra.google.marketing_platform.utils import erf_utils
 
@@ -42,7 +40,7 @@ from orchestra.google.marketing_platform.utils.schema.sdf import (
 logger = logging.getLogger(__name__)
 
 
-class GoogleDisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360CreateReportOperator(BaseOperator):
     """Creates and runs a new Display & Video 360 query.
 
     Attributes:
@@ -89,7 +87,7 @@ class GoogleDisplayVideo360CreateReportOperator(GoogleMarketingPlatformBaseOpera
         context['task_instance'].xcom_push('query_id', response['queryId'])
 
 
-class GoogleDisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360RunReportOperator(BaseOperator):
     """Runs a stored query to generate a report.
 
     Attributes:
@@ -129,7 +127,7 @@ class GoogleDisplayVideo360RunReportOperator(GoogleMarketingPlatformBaseOperator
         request.execute()
 
 
-class GoogleDisplayVideo360DownloadReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360DownloadReportOperator(BaseOperator):
     """Downloads a Display & Video 360 report into Google Cloud Storage.
 
     Attributes:
@@ -227,7 +225,7 @@ class GoogleDisplayVideo360DownloadReportOperator(GoogleMarketingPlatformBaseOpe
             os.unlink(temp_file.name)
 
 
-class GoogleDisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360DeleteReportOperator(BaseOperator):
     """Deletes Display & Video 360 queries and any associated reports.
 
     Attributes:
@@ -279,7 +277,7 @@ class GoogleDisplayVideo360DeleteReportOperator(GoogleMarketingPlatformBaseOpera
                 ignore_if_missing=self.ignore_if_missing)
 
 
-class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360ERFToBigQueryOperator(BaseOperator):
     """Upload Multiple Entity Read Files to specified big query dataset.
     """
 
@@ -339,7 +337,7 @@ class GoogleDisplayVideo360ERFToBigQueryOperator(GoogleMarketingPlatformBaseOper
             self.gcs_hook.delete(self.gcs_bucket, filename)
 
 
-class GoogleDisplayVideo360SDFToBigQueryOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360SDFToBigQueryOperator(BaseOperator):
     """Make a request to SDF API and upload the data to BQ."""
 
     DEFAULT_SDF_TABLE_NAMES = {
@@ -443,7 +441,7 @@ class GoogleDisplayVideo360SDFToBigQueryOperator(GoogleMarketingPlatformBaseOper
                 self.gcs_hook.delete(self.gcs_bucket, filename)
 
 
-class GoogleDisplayVideo360RecordSDFAdvertiserOperator(GoogleMarketingPlatformBaseOperator):
+class GoogleDisplayVideo360RecordSDFAdvertiserOperator(BaseOperator):
     """
     Get Partner and Advertiser Ids from a report and populate an airflow variable.
     """
