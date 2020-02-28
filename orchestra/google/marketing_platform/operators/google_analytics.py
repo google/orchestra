@@ -50,9 +50,6 @@ class GoogleAnalyticsDataImportUploadOperator(BaseOperator):
     :param mime_type: Label to identify the type of data stored for the HTTP
            request
     :type mime_type: str
-    :param data_import_filename: The name of the file that will be visible in
-          the data import screen in GA. (templated)
-    :type data_import_filename: str
     :param delegate_to: The account to impersonate, if any.
     :type delegate_to: str
     :param api_name: The name of the GA API.
@@ -64,8 +61,7 @@ class GoogleAnalyticsDataImportUploadOperator(BaseOperator):
 
     template_fields = [
         'storage_bucket',
-        'storage_name_object',
-        'data_import_filename']
+        'storage_name_object']
 
     def __init__(self,
                  storage_bucket,
