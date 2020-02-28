@@ -32,7 +32,8 @@ logger = logging.getLogger(__name__)
 class GoogleAnalyticsDataImportUploadOperator(BaseOperator):
     """Take a file from Cloud Storage and uploads it to GA via data import API.
 
-    :param storage_bucket: The Google cloud storage bucket where the file is stored
+    :param storage_bucket: The Google cloud storage bucket where the file is
+          stored. (templated)
     :type storage_bucket: str
     :param storage_name_object: The name of the object in the desired Google cloud
           storage bucket. (templated) If the destination points to an existing
@@ -50,7 +51,7 @@ class GoogleAnalyticsDataImportUploadOperator(BaseOperator):
            request
     :type mime_type: str
     :param data_import_filename: The name of the file that will be visible in
-          the data import screen in GA.
+          the data import screen in GA. (templated)
     :type data_import_filename: str
     :param delegate_to: The account to impersonate, if any.
     :type delegate_to: str
@@ -60,6 +61,11 @@ class GoogleAnalyticsDataImportUploadOperator(BaseOperator):
     :type api_version: str
 
     """
+
+    template_fields = [
+        'storage_bucket',
+        'storage_name_object',
+        'data_import_filename']
 
     def __init__(self,
                  storage_bucket,
@@ -200,7 +206,8 @@ class GoogleAnalyticsModifyFileHeadersDataImportOperator(BaseOperator):
     match the custom dimension ID in GA i.e clientId : dimensionX.
 
 
-    :param storage_bucket: The Google cloud storage bucket where the file is stored
+    :param storage_bucket: The Google cloud storage bucket where the file is
+          stored. (templated)
     :type storage_bucket: str
     :param storage_name_object: The name of the object in the desired Google cloud
           storage bucket. (templated) If the destination points to an existing
@@ -216,6 +223,8 @@ class GoogleAnalyticsModifyFileHeadersDataImportOperator(BaseOperator):
     :param delegate_to: The account to impersonate, if any.
     :type delegate_to: str
     """
+
+    template_fields = ['storage_bucket', 'storage_name_object']
 
     def __init__(self,
                  storage_bucket,
