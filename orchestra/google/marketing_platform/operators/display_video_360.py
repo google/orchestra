@@ -15,6 +15,7 @@
 #
 import logging
 import json
+import csv
 import os
 from random import randint
 import tempfile
@@ -470,29 +471,23 @@ class GoogleDisplayVideo360RecordSDFAdvertiserOperator(GoogleMarketingPlatformBa
                 report_file.write(chunk)
             report_file.close()
             advertisers = {}
-            headers = False
             with open(report_file.name, 'r') as f:
-                for line in f:
-                    if not headers:
-                        headers = line
-                        headers = headers.strip().split(',')
-                        advertiser_id_index = headers.index('Advertiser ID')
-                        partner_id_index = headers.index('Partner ID')
-                    elif line.strip():
-                        line = line.strip().split(',')
-                        advertiser_id = line[advertiser_id_index]
-                        partner_id = line[partner_id_index]
-                        if advertiser_id.strip():
-                            try:
-                                advertisers[partner_id].append(advertiser_id)
-                                message = 'ADDING to key %s new advertiser %s' % (
-                                    partner_id, advertiser_id)
-                                logger.info(message)
-                            except KeyError:
-                                advertisers[partner_id] = [advertiser_id]
-                                message = 'CREATING new key %s with advertiser %s' % (
-                                    partner_id, advertiser_id)
-                                logger.info(message)
+                csv_reader = csv.DictReader(f)
+
+                for line in csv_reader:
+                    advertiser_id = line["Advertiser ID"]
+                    partner_id = line["Partner ID"]
+                    if advertiser_id.strip():
+                        try:
+                            advertisers[partner_id].append(advertiser_id)
+                            message = 'ADDING to key %s new advertiser %s' % (
+                                partner_id, advertiser_id)
+                            logger.info(message)
+                        except KeyError:
+                            advertisers[partner_id] = [advertiser_id]
+                            message = 'CREATING new key %s with advertiser %s' % (
+                                partner_id, advertiser_id)
+                            logger.info(message)
                     else:
                         break
             models.Variable.set(self.variable_name, json.dumps(advertisers))
