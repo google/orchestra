@@ -459,16 +459,12 @@ class GoogleDisplayVideo360RecordSDFAdvertiserOperator(GoogleMarketingPlatformBa
                 report_file.write(chunk)
             report_file.close()
             advertisers = {}
-            headers = False
             with open(report_file.name, 'r') as f:
-                csv_reader = csv.reader(f)
-                headers = next(csv_reader)
-                advertiser_id_index = headers.index('Advertiser ID')
-                partner_id_index = headers.index('Partner ID')
+                csv_reader = csv.DictReader(f)
 
                 for line in csv_reader:
-                    advertiser_id = line[advertiser_id_index]
-                    partner_id = line[partner_id_index]
+                    advertiser_id = line["Advertiser ID"]
+                    partner_id = line["Partner ID"]
                     if advertiser_id.strip():
                         try:
                             advertisers[partner_id].append(advertiser_id)
