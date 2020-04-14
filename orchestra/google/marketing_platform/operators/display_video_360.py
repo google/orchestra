@@ -17,6 +17,7 @@ import logging
 import json
 import csv
 import os
+import io
 from random import randint
 import tempfile
 import time
@@ -28,6 +29,8 @@ from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryHook
 from airflow.contrib.hooks.bigquery_hook import BigQueryBaseCursor
 from airflow.models import BaseOperator
+
+from googleapiclient.http import MediaIoBaseDownload
 
 from orchestra.google.marketing_platform.hooks.display_video_360 import (
     GoogleDisplayVideo360Hook
@@ -493,3 +496,109 @@ class GoogleDisplayVideo360RecordSDFAdvertiserOperator(BaseOperator):
             if report_file:
                 report_file.close()
                 os.unlink(report_file.name)
+
+
+class GoogleDisplayVideo360SDFdownloadTaskCreateOperator(BaseOperator):
+    """Creates new Display & Video 360 SDF Download Task.
+    https://developers.google.com/display-video/api/reference/rest/v1/sdfdownloadtasks/create
+    """
+
+    template_fields = ['params', 'advertiser_id','file_types','filter_type','filter_ids']
+    ui_color = '#A6E6A6'
+
+    def __init__(self,
+                 advertiser_id=None,
+                 gcp_conn_id='google_cloud_default',
+                 file_types=None,
+                 filter_ids=None,
+                 filter_type=None,
+                 sdf_version="SDF_VERSION_5_1",
+                 api_version='v1',
+                 api_name='displayvideo',
+                 delegate_to=None,
+                 *args,
+                 **kwargs):
+        super(GoogleDisplayVideo360SDFdownloadTaskCreateOperator, self).__init__(*args, **kwargs)
+        self.advertiser_id = advertiser_id
+        self.file_types = file_types
+        self.filter_ids = filter_ids
+        self.filter_type = filter_type
+        self.sdf_version = sdf_version
+        self.api_version = api_version
+        self.api_name = api_name
+        self.gcp_conn_id = gcp_conn_id
+        self.delegate_to = delegate_to
+        self.hook = None
+
+    def execute(self, context):
+        if self.hook is None:
+            self.hook = GoogleDisplayVideo360Hook(
+                api_version=self.api_version,
+                api_name=self.api_name,
+                gcp_conn_id=self.gcp_conn_id,
+                delegate_to=self.delegate_to)
+        self.report_body = {
+            "advertiserId": self.advertiser_id,
+            "version": self.sdf_version,
+            "parentEntityFilter": {
+                "fileType": self.file_types,
+                "filterType": "FILTER_TYPE_NONE"
+            }
+        }
+        print(self.report_body)
+        request = self.hook.get_service().sdfdownloadtasks().create(body=self.report_body)
+        response = request.execute()
+        print(response)
+
+        context['task_instance'].xcom_push('sdfdownloadtasks_operation', response['name'])
+
+class GoogleDisplayVideo360MediaDownloadOperator(BaseOperator):
+    """Downloads media. 
+        https://developers.google.com/display-video/api/reference/rest/v1/media/download
+    """
+
+    template_fields = ['resourceName','filePath']
+    ui_color = '#C6C6A6'
+
+    def __init__(self,
+                 resourceName=None,
+                 filePath=None,
+                 gcp_conn_id='google_cloud_default',
+                 api_version='v1',
+                 api_name='displayvideo',
+                 delegate_to=None,
+                 *args,
+                 **kwargs):
+        super(GoogleDisplayVideo360MediaDownloadOperator, self).__init__(*args, **kwargs)
+        self.resourceName = resourceName
+        self.filePath = filePath
+        self.api_version = api_version
+        self.api_name = api_name
+        self.gcp_conn_id = gcp_conn_id
+        self.delegate_to = delegate_to
+        self.hook = None
+
+    def execute(self, context):
+        if self.hook is None:
+            self.hook = GoogleDisplayVideo360Hook(
+                api_version=self.api_version,
+                api_name=self.api_name,
+                gcp_conn_id=self.gcp_conn_id,
+                delegate_to=self.delegate_to)
+        
+        
+        downloadRequest = self.hook.get_service().media().download_media(resourceName=self.resourceName)
+
+        # Create output stream for downloaded file
+        outStream = io.FileIO(self.filePath, mode='wb')
+
+        # Make downloader object
+        downloader = MediaIoBaseDownload(outStream, downloadRequest)
+
+        # Download media file in chunks until finished
+        download_finished = False
+        while download_finished is False:
+            download_finished = downloader.next_chunk()
+
+        print("File downloaded to %s" % self.filePath)
+        return True
