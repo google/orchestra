@@ -1,0 +1,207 @@
+{
+    "reportScope": {
+        "agencyId": "{{ params.agencyId }}",
+        "advertiserId": "{{ params.advertiserId }}"
+    },
+    "reportType": "conversion",
+    "columns": [
+        {
+            "columnName": "status"
+        },
+        {
+            "columnName": "deviceSegment"
+        },
+        {
+            "columnName": "floodlightGroup"
+        },
+        {
+            "columnName": "floodlightGroupConversionType"
+        },
+        {
+            "columnName": "floodlightGroupId"
+        },
+        {
+            "columnName": "floodlightGroupTag"
+        },
+        {
+            "columnName": "floodlightActivity"
+        },
+        {
+            "columnName": "floodlightActivityId"
+        },
+        {
+            "columnName": "floodlightActivityTag"
+        },
+        {
+            "columnName": "agency"
+        },
+        {
+            "columnName": "agencyId"
+        },
+        {
+            "columnName": "advertiser"
+        },
+        {
+            "columnName": "advertiserId"
+        },
+        {
+            "columnName": "account"
+        },
+        {
+            "columnName": "accountId"
+        },
+        {
+            "columnName": "accountEngineId"
+        },
+        {
+            "columnName": "accountType"
+        },
+        {
+            "columnName": "campaign"
+        },
+        {
+            "columnName": "campaignId"
+        },
+        {
+            "columnName": "campaignStatus"
+        },
+        {
+            "columnName": "adGroup"
+        },
+        {
+            "columnName": "adGroupId"
+        },
+        {
+            "columnName": "adGroupStatus"
+        },
+        {
+            "columnName": "productTargetId"
+        },
+        {
+            "columnName": "productGroupId"
+        },
+        {
+            "columnName": "ad"
+        },
+        {
+            "columnName": "adId"
+        },
+        {
+            "columnName": "isUnattributedAd"
+        },
+        {
+            "columnName": "inventoryAccountId"
+        },
+        {
+            "columnName": "productId"
+        },
+        {
+            "columnName": "productCountry"
+        },
+        {
+            "columnName": "productLanguage"
+        },
+        {
+            "columnName": "productStoreId"
+        },
+        {
+            "columnName": "productChannel"
+        },
+        {
+            "columnName": "conversionId"
+        },
+        {
+            "columnName": "advertiserConversionId"
+        },
+        {
+            "columnName": "conversionType"
+        },
+        {
+            "columnName": "conversionRevenue"
+        },
+        {
+            "columnName": "conversionQuantity"
+        },
+        {
+            "columnName": "conversionDate"
+        },
+        {
+            "columnName": "conversionTimestamp"
+        },
+        {
+            "columnName": "conversionLastModifiedTimestamp"
+        },
+        {
+            "columnName": "conversionAttributionType"
+        },
+        {
+            "columnName": "conversionVisitId"
+        },
+        {
+            "columnName": "conversionVisitTimestamp"
+        },
+        {
+            "columnName": "conversionVisitExternalClickId"
+        },
+        {
+            "columnName": "conversionSearchTerm"
+        },
+        {
+            "columnName": "floodlightOriginalRevenue"
+        },
+        {
+            "columnName": "floodlightEventRequestString"
+        },
+        {
+            "columnName": "floodlightReferrer"
+        },
+        {
+            "columnName": "floodlightOrderId"
+        },
+        {
+            "columnName": "feedItemId"
+        },
+        {
+            "columnName": "feedId"
+        },
+        {
+            "columnName": "feedType"
+        },
+        {
+            "customDimensionName": "{{ params.conversionId }}",
+            "platformSource": "floodlight"
+        },
+        {
+            "customDimensionName": "{{ params.productIds }}",
+            "platformSource": "floodlight"
+        },
+        {
+            "customDimensionName": "{{ params.productQuantities }}",
+            "platformSource": "floodlight"
+        },
+        {
+            "customDimensionName": "{{ params.productNetPrices }}",
+            "platformSource": "floodlight"
+        }
+    ],
+    "timeRange": {
+        "startDate": "{{ yesterday_ds }}",
+        "endDate": "{{ ds }}"
+    },
+    "filters": [
+        {
+            "column": {
+                "columnName": "conversionType"
+            },
+            "operator": "equals",
+            "values": [
+                "Transaction"
+            ]
+        }
+    ],
+    "downloadFormat": "csv",
+    "maxRowsPerFile": 6000000,
+    "statisticsCurrency": "advertiser",
+    "verifySingleTimeZone": "false",
+    "includeRemovedEntities": "false"
+}

@@ -1,0 +1,16 @@
+agencyId: "agencyId"
+advertiserId: "advertiserId"
+custom_dimensions:
+    conversionId: "conversionID"
+    productIds: "productIDs"
+    productQuantities: "quantitypProducts"
+    productNetPrices: "paidPricepProduct"
+floodlight_activity: "dataUpload"
+sheet_key: "Google Sheet Key"
+products_tab_name: "Google Sheet Tab Name"
+column_names:
+    productId: "product_Nr"
+    internalCost: "int_Costprice"
+report_file: "data/{{ ts_nodash }}-report.csv"
+conversions_file: "data/{{ ts_nodash }}-conversions.json "
+base_folder: "path_to_project_folder"
