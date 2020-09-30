@@ -23,8 +23,13 @@ Search Ads 360.
 import json
 import os
 import tempfile
+from pathlib import Path
+
 from airflow.contrib.hooks.gcs_hook import GoogleCloudStorageHook
+from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
+from airflow.utils.decorators import apply_defaults
+
 from orchestra.google.marketing_platform.hooks.search_ads_360 import (
   GoogleSearchAds360Hook
 )
@@ -167,3 +172,58 @@ class GoogleSearchAds360DownloadReportOperator(BaseOperator):
     finally:
       temp_file.close()
       os.unlink(temp_file.name)
+
+class GoogleSearchAds360InsertConversionOperator(BaseOperator):
+  """Insert conversions in  Search Ads 360.
+
+  Attributes:
+    conversions_file: path to json file with conversions to be inserted (templated)
+        If the destination points to an existing folder, the report will be
+        written under the specified folder.
+    gcp_conn_id: The connection ID to use when fetching connection info.
+    delegate_to: The account to impersonate, if any.
+
+  XComs:
+    destination_bucket: The Google cloud storage bucket the report was written
+        to.
+    destination_object: The Google cloud storage URI for the report.
+  """
+
+  template_fields = ['conversions_file']
+  hook = None
+
+  @apply_defaults
+  def __init__(self,
+      *args,
+      conversions_file,
+      gcp_conn_id='google_cloud_default',
+      delegate_to=None,
+      **kwargs):
+    super(GoogleSearchAds360InsertConversionOperator, self).__init__(*args, **kwargs)
+    self.conversions_file = conversions_file
+    self.gcp_conn_id = gcp_conn_id
+    self.delegate_to = delegate_to
+
+  def execute(self, context):
+    file = Path(self.conversions_file)
+    if not file.is_file():
+      raise AirflowException(
+        f'conversions_file {self.conversions_file} not found'
+      )
+
+    if self.hook is None:
+      self.hook = GoogleSearchAds360Hook(
+        gcp_conn_id=self.gcp_conn_id, delegate_to=self.delegate_to
+      )
+
+    conversions = json.loads(file.read_text())
+    if not conversions:
+      self.log.info('No conversions to insert')
+      return
+
+    request = (
+      self.hook.get_service()
+      .conversion()
+      .insert(body={'conversion': conversions})
+    )
+    request.execute()
