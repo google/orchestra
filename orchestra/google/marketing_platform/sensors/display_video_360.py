@@ -82,3 +82,58 @@ class GoogleDisplayVideo360ReportSensor(BaseSensorOperator):
                 return True
 
         return False
+
+
+class GoogleDisplayVideo360SDFdownloadTaskOperationGetSensor(BaseSensorOperator):
+    """Sensor for detecting the completion of DV360 SDF File Download.
+
+    Waits for a Display & Video 360 SDF download to complete 
+    
+    """
+
+    template_fields = ['operation_name']
+
+    def __init__(self,
+                 operation_name=None,
+                 gcp_conn_id='google_cloud_default',
+                 delegate_to=None,
+                 poke_interval=30,
+                 timeout=60 * 60 * 24,
+                 mode='reschedule',
+                 api_version='v1',
+                 api_name='displayvideo',
+                 *args,
+                 **kwargs):
+        super(GoogleDisplayVideo360SDFdownloadTaskOperationGetSensor, self).__init__(
+            poke_interval=poke_interval,
+            timeout=timeout,
+            mode=mode,
+            *args,
+            **kwargs)
+        
+        self.gcp_conn_id = gcp_conn_id
+        self.operation_name = operation_name
+        self.delegate_to = delegate_to
+        self.api_version = api_version
+        self.api_name = api_name
+        self.hook = None
+
+    def poke(self, context):
+        if self.hook is None:
+            self.hook = GoogleDisplayVideo360Hook(
+                api_version=self.api_version,
+                api_name=self.api_name,
+                gcp_conn_id=self.gcp_conn_id,
+                delegate_to=self.delegate_to)
+
+        request = self.hook.get_service().sdfdownloadtasks().operations().get(name=self.operation_name)
+        response = request.execute()
+        if response:
+            response_body = response.get('response')
+            if response_body and response.get('done') == True:
+                resourceName = response_body.get(u'resourceName')
+                if resourceName:
+                    context['task_instance'].xcom_push('resourceName', resourceName)
+                return True
+
+        return False
